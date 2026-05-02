@@ -1,0 +1,2 @@
+-- Seed file intentionally left minimal.
+-- Add INSERT statements here when test data is needed.

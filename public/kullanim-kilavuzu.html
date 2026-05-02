@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İK Yönetim Sistemi — Kullanım Kılavuzu</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; color: #1e293b; background: #f8fafc; }
+    /* Layout */
+    .layout { display: flex; min-height: 100vh; }
+    nav { width: 260px; min-width: 220px; background: #1e293b; color: #cbd5e1; position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 24px 0 40px; flex-shrink: 0; }
+    nav .logo { padding: 0 20px 20px; border-bottom: 1px solid #334155; margin-bottom: 12px; }
+    nav .logo h2 { color: #f1f5f9; font-size: 15px; font-weight: 700; }
+    nav .logo p { color: #64748b; font-size: 11px; margin-top: 2px; }
+    nav a { display: block; padding: 7px 20px; font-size: 13px; color: #94a3b8; text-decoration: none; border-left: 3px solid transparent; transition: all .15s; }
+    nav a:hover, nav a.active { color: #f1f5f9; background: #334155; border-left-color: #3b82f6; }
+    nav .section-title { padding: 14px 20px 4px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #475569; }
+    main { flex: 1; padding: 36px 48px 80px; max-width: 980px; }
+    /* Typography */
+    h1 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+    h2 { font-size: 20px; font-weight: 700; color: #0f172a; margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+    h3 { font-size: 15px; font-weight: 700; color: #1e293b; margin: 24px 0 10px; }
+    h4 { font-size: 13px; font-weight: 700; color: #334155; margin: 16px 0 8px; }
+    p { line-height: 1.7; color: #475569; margin-bottom: 10px; }
+    /* Cards */
+    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; }
+    .card-title { font-size: 16px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-amber { background: #fef3c7; color: #b45309; }
+    .badge-red { background: #fee2e2; color: #b91c1c; }
+    .badge-purple { background: #f3e8ff; color: #7c3aed; }
+    .badge-gray { background: #f1f5f9; color: #475569; }
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+    th { background: #f8fafc; text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #64748b; border-bottom: 2px solid #e2e8f0; }
+    td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+    /* Field list */
+    .field-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; margin-bottom: 12px; }
+    .field-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 7px; padding: 8px 12px; }
+    .field-label { font-size: 12px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+    .field-type { font-size: 11px; color: #64748b; }
+    /* Tab strip */
+    .tab-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .tab { padding: 5px 14px; background: #f1f5f9; border-radius: 99px; font-size: 12px; font-weight: 600; color: #475569; }
+    .tab.active { background: #dbeafe; color: #1d4ed8; }
+    /* Alert box */
+    .alert { border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; line-height: 1.6; }
+    .alert-blue { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
+    .alert-amber { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+    /* Role table */
+    .role-row td:first-child { font-weight: 700; }
+    /* Print */
+    @media print { nav { display: none; } main { padding: 20px; max-width: 100%; } h2 { page-break-before: always; } }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── NAVİGASYON ── -->
+<nav>
+  <div class="logo">
+    <h2>İK Yönetim Sistemi</h2>
+    <p>Kullanım Kılavuzu v1.0</p>
+  </div>
+  <div class="section-title">Genel</div>
+  <a href="#giris">Giriş</a>
+  <a href="#roller">Roller ve Yetkiler</a>
+  <div class="section-title">Modüller</div>
+  <a href="#giris-ekrani">1. Giriş Ekranı</a>
+  <a href="#personel">2. Personel Yönetimi</a>
+  <a href="#ozluk">3. Özlük Dosyası</a>
+  <a href="#gorev">4. Görev Tanımı</a>
+  <a href="#bordro">5. Bordro</a>
+  <a href="#izin">6. İzin Yönetimi</a>
+  <a href="#kullanicilar">7. Kullanıcılar</a>
+  <a href="#sistem">8. Sistem Ayarları</a>
+  <a href="#takvim">9. Takvim</a>
+  <a href="#arama">10. Arama</a>
+</nav>
+
+<!-- ── İÇERİK ── -->
+<main>
+
+  <h1>İK Yönetim Sistemi</h1>
+  <p style="color:#64748b; margin-bottom:28px;">Kullanım Kılavuzu — Tüm ekranlar, alanlar ve tablolar</p>
+
+  <!-- GİRİŞ -->
+  <section id="giris">
+    <h2>Giriş</h2>
+    <p>Bu kılavuz; personel yönetimi, bordro, izin takibi, görev tanımları ve özlük dosyaları modüllerini içeren İK Yönetim Sistemi'nin tüm ekranlarını, form alanlarını ve tablo sütunlarını açıklamaktadır.</p>
+    <div class="alert alert-blue">
+      <strong>Önemli:</strong> Sisteme erişim için geçerli bir e-posta ve şifre gereklidir. Veriler şirkete özeldir; her kullanıcı yalnızca kendi şirketinin verilerini görebilir.
+    </div>
+  </section>
+
+  <!-- ROLLER -->
+  <section id="roller">
+    <h2>Roller ve Yetkiler</h2>
+    <table>
+      <thead><tr><th>Rol</th><th>Açıklama</th><th>Yetkiler</th></tr></thead>
+      <tbody>
+        <tr class="role-row"><td>Superadmin</td><td>Sistem yöneticisi</td><td>Tüm şirketlere tam erişim, sistem ayarları</td></tr>
+        <tr class="role-row"><td>Admin</td><td>Şirket yöneticisi</td><td>Tüm modüllere tam erişim</td></tr>
+        <tr class="role-row"><td>HR</td><td>İnsan kaynakları</td><td>Personel, bordro, izin, özlük dosyaları</td></tr>
+        <tr class="role-row"><td>Manager</td><td>Yönetici</td><td>Kendi departmanı, izin onayları</td></tr>
+        <tr class="role-row"><td>Employee</td><td>Çalışan</td><td>Kendi bilgilerini görüntüleme, izin talebi</td></tr>
+        <tr class="role-row"><td>User</td><td>Standart kullanıcı</td><td>Sınırlı görüntüleme</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 1. GİRİŞ EKRANI -->
+  <section id="giris-ekrani">
+    <h2>1. Giriş Ekranı</h2>
+    <p>Sisteme giriş için kullanılan kimlik doğrulama ekranıdır.</p>
+    <div class="card">
+      <div class="card-title">Form Alanları</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>E-posta</td><td>email</td><td><span class="badge badge-red">Evet</span></td><td>Kayıtlı e-posta adresi</td></tr>
+          <tr><td>Şifre</td><td>password</td><td><span class="badge badge-red">Evet</span></td><td>Hesap şifresi</td></tr>
+        </tbody>
+      </table>
+      <h4>Butonlar</h4>
+      <table>
+        <thead><tr><th>Buton</th><th>İşlev</th></tr></thead>
+        <tbody>
+          <tr><td>Giriş Yap</td><td>Form doğrulama ve oturum başlatma</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 2. PERSONEL YÖNETİMİ -->
+  <section id="personel">
+    <h2>2. Personel Yönetimi</h2>
+    <p>Şirketteki tüm çalışanların listelendiği, eklendiği ve düzenlendiği ana modüldür.</p>
+
+    <div class="card">
+      <div class="card-title">Personel Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>#</th><th>Sütun</th><th>Tür</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Ad Soyad</td><td>Metin</td><td>Çalışanın tam adı</td></tr>
+          <tr><td>2</td><td>Şirket</td><td>Metin</td><td>Bağlı olduğu şirket (Superadmin görür)</td></tr>
+          <tr><td>3</td><td>Departman</td><td>Metin</td><td>Çalışanın departmanı</td></tr>
+          <tr><td>4</td><td>Pozisyon</td><td>Metin</td><td>Unvan / görev</td></tr>
+          <tr><td>5</td><td>Çalışan Tipi</td><td>Rozet</td><td>Normal / Emekli</td></tr>
+          <tr><td>6</td><td>Seviye</td><td>Metin</td><td>Junior / Mid / Senior / Lead / Manager</td></tr>
+          <tr><td>7</td><td>Ücret</td><td>Para (₺)</td><td>Brüt maaş bilgisi</td></tr>
+          <tr><td>8</td><td>Durum</td><td>Rozet</td><td>Aktif / İzinde / Pasif</td></tr>
+          <tr><td>9</td><td>Telefon</td><td>Metin</td><td>İletişim numarası</td></tr>
+          <tr><td>10</td><td>İşlemler</td><td>Butonlar</td><td>Görüntüle / Düzenle / İndir / Sil</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Filtreler ve Araç Çubuğu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Seçenekler</th></tr></thead>
+        <tbody>
+          <tr><td>Departman Filtresi</td><td>select</td><td>Tüm departmanlar + mevcut departmanlar</td></tr>
+          <tr><td>Şirket Filtresi</td><td>select</td><td>Tüm şirketler (Superadmin)</td></tr>
+          <tr><td>Arama</td><td>text</td><td>Ad / departman / pozisyon</td></tr>
+        </tbody>
+      </table>
+      <h4>Araç Çubuğu Butonları</h4>
+      <table>
+        <thead><tr><th>Buton</th><th>İşlev</th></tr></thead>
+        <tbody>
+          <tr><td>+ Yeni Çalışan</td><td>Yeni personel ekleme formunu açar</td></tr>
+          <tr><td>CSV İndir</td><td>Filtrelenmiş listeyi CSV olarak dışa aktarır</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Yeni / Düzenle Personel Formu — Sekmeler</div>
+      <div class="tab-strip">
+        <span class="tab active">Genel Bilgiler</span>
+        <span class="tab">İş Bilgileri</span>
+        <span class="tab">İletişim</span>
+        <span class="tab">Yetkinlikler</span>
+      </div>
+
+      <h4>Sekme: Genel Bilgiler</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Ad Soyad</td><td>text</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>TC Kimlik No</td><td>text</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Sicil No</td><td>text</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>İşe Giriş Tarihi</td><td>date</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Medeni Durum</td><td>select (Bekar/Evli)</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Çocuk Sayısı</td><td>number</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Engellilik Durumu</td><td>select (Yok/1.Derece/2.Derece/3.Derece)</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+
+      <h4>Sekme: İş Bilgileri</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Şirket</td><td>select</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Departman</td><td>select</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Pozisyon</td><td>text</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Çalışan Tipi</td><td>select (Normal / Emekli)</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Seviye</td><td>select (Junior/Mid/Senior/Lead/Manager)</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Maaş (₺)</td><td>number</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Durum</td><td>select (Aktif/İzinde/Pasif)</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+
+      <h4>Sekme: İletişim</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Telefon</td><td>tel</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>E-posta</td><td>email</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Adres</td><td>textarea</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+
+      <h4>Sekme: Yetkinlikler</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Yetkinlikler</td><td>text (virgülle ayrılmış)</td><td>Yazılım dilleri, sertifikalar vb.</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Form Butonları</h4>
+      <table>
+        <thead><tr><th>Buton</th><th>İşlev</th></tr></thead>
+        <tbody>
+          <tr><td>Çalışanı Kaydet / Güncelle</td><td>Formu kaydeder</td></tr>
+          <tr><td>Çalışanı Sil</td><td>Personeli sistemden kaldırır (onay ister)</td></tr>
+          <tr><td>İptal</td><td>Formu kapatır, değişiklikler kaydedilmez</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. ÖZLÜK DOSYASI -->
+  <section id="ozluk">
+    <h2>3. Çalışan Özlük Dosyası</h2>
+    <p>Her çalışanın belgelerini, bordro özetini, izin geçmişini ve görev tanımını gösteren kapsamlı personel dosyasıdır.</p>
+
+    <div class="card">
+      <div class="card-title">Personel Seçimi</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Personel Seçin</td><td>select</td><td>Şirketteki tüm aktif personelin listesi</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Sekmeler</div>
+      <div class="tab-strip">
+        <span class="tab active">Genel Bilgiler</span>
+        <span class="tab">Belgeler</span>
+        <span class="tab">Bordro Özeti</span>
+        <span class="tab">İzin Durumu</span>
+        <span class="tab">Görev Tanımı</span>
+        <span class="tab">Tutanaklar</span>
+        <span class="tab">Şikayetler</span>
+      </div>
+
+      <h4>Sekme: Genel Bilgiler — Görüntülenen Alanlar</h4>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Ad Soyad</div><div class="field-type">Metin (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">TC Kimlik No</div><div class="field-type">Metin (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Sicil No</div><div class="field-type">Metin (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Departman</div><div class="field-type">Metin (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Pozisyon / Unvan</div><div class="field-type">Metin (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">İşe Giriş Tarihi</div><div class="field-type">Tarih (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Çalışma Süresi</div><div class="field-type">Hesaplanan (yıl/ay)</div></div>
+        <div class="field-item"><div class="field-label">Telefon</div><div class="field-type">Metin (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">E-posta</div><div class="field-type">Metin (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Adres</div><div class="field-type">Metin (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Personel Türü</div><div class="field-type">Normal / Emekli</div></div>
+        <div class="field-item"><div class="field-label">Durum</div><div class="field-type">Aktif / İzinde / Pasif</div></div>
+      </div>
+
+      <h4>Sekme: Belgeler — Kategoriler ve Alanlar</h4>
+      <table>
+        <thead><tr><th>Belge Kategorisi</th><th>Açıklama</th><th>Desteklenen Formatlar</th></tr></thead>
+        <tbody>
+          <tr><td>İş Yeri Giriş Bildirgesi</td><td>SGK işe giriş bildirge belgesi</td><td rowspan="5">PDF, DOC, DOCX, JPG, JPEG, PNG, XLS, XLSX (max 4 MB)</td></tr>
+          <tr><td>Adli Sicil Kaydı</td><td>Cumhuriyet Savcılığından alınan adli sicil belgesi</td></tr>
+          <tr><td>Adres Belgesi</td><td>e-Devlet üzerinden alınan yerleşim yeri belgesi</td></tr>
+          <tr><td>Görev Tanımı Dosyası</td><td>Onaylı görev tanımı belgesi</td></tr>
+          <tr><td>Diğer Belgeler</td><td>Diğer resmi belgeler</td></tr>
+        </tbody>
+      </table>
+      <p>Her kategori için butonlar: <strong>Dosya Seç</strong> (yükleme) • Her dosya satırında: <strong>İndir</strong> / <strong>Sil</strong></p>
+
+      <h4>Sekme: Bordro Özeti — Tablo Sütunları</h4>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Dönem</td><td>Metin (YYYY-MM)</td></tr>
+          <tr><td>Brüt Ücret</td><td>Para (₺)</td></tr>
+          <tr><td>Net Ücret</td><td>Para (₺)</td></tr>
+          <tr><td>SGK Kesinti</td><td>Para (₺)</td></tr>
+        </tbody>
+      </table>
+      <p>Tablo altında <strong>Toplam satırı</strong> (Brüt ve Net için) görüntülenir.</p>
+
+      <h4>Sekme: İzin Durumu — Özet Kartlar</h4>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Toplam Hak</div><div class="field-type">Gün sayısı</div></div>
+        <div class="field-item"><div class="field-label">Kullanılan</div><div class="field-type">Gün sayısı</div></div>
+        <div class="field-item"><div class="field-label">Kalan</div><div class="field-type">Gün sayısı</div></div>
+        <div class="field-item"><div class="field-label">Çalışma Yılı</div><div class="field-type">Yıl sayısı</div></div>
+      </div>
+      <h4>İzin Talepleri Tablosu Sütunları</h4>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>İzin Türü</td><td>Metin</td></tr>
+          <tr><td>Başlangıç</td><td>Tarih</td></tr>
+          <tr><td>Bitiş</td><td>Tarih</td></tr>
+          <tr><td>Gün</td><td>Sayı</td></tr>
+          <tr><td>Durum</td><td>Rozet (Beklemede / Onaylandı / Reddedildi)</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Sekme: Görev Tanımı — Görüntülenen Alanlar</h4>
+      <p>Bu sekmede yalnızca <strong>onaylanmış</strong> görev tanımları listelenir.</p>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Görev Adı</div><div class="field-type">Metin</div></div>
+        <div class="field-item"><div class="field-label">İş Birimi</div><div class="field-type">Metin</div></div>
+        <div class="field-item"><div class="field-label">Bağlı Pozisyon</div><div class="field-type">Metin</div></div>
+        <div class="field-item"><div class="field-label">Onay Tarihi</div><div class="field-type">Tarih</div></div>
+        <div class="field-item"><div class="field-label">Görev Açıklaması</div><div class="field-type">Uzun metin</div></div>
+        <div class="field-item"><div class="field-label">Sorumluluklar</div><div class="field-type">Liste</div></div>
+        <div class="field-item"><div class="field-label">Yetki ve Sorumluluklar</div><div class="field-type">Liste</div></div>
+        <div class="field-item"><div class="field-label">Performans Kriterleri</div><div class="field-type">Liste</div></div>
+        <div class="field-item"><div class="field-label">Çalışmalar</div><div class="field-type">Liste</div></div>
+      </div>
+
+      <h4>Sekme: Tutanaklar</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Tutanak Metni</td><td>textarea</td><td>Disiplin, uyarı, toplantı tutanakları</td></tr>
+        </tbody>
+      </table>
+      <p>Butonlar: <strong>Yazı Olarak Kaydet</strong> / <strong>Dosya Yükle</strong></p>
+
+      <h4>Sekme: Şikayetler</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Şikayet Metni</td><td>textarea</td><td>Çalışana yönelik şikayet bildirimleri</td></tr>
+        </tbody>
+      </table>
+      <p>Butonlar: <strong>Yazı Olarak Kaydet</strong> / <strong>Dosya Yükle</strong></p>
+    </div>
+  </section>
+
+  <!-- 4. GÖREV TANIMI -->
+  <section id="gorev">
+    <h2>4. Görev Tanımı</h2>
+    <p>Personel görev tanımlarının hazırlanması, onaylanması ve takip edildiği modüldür.</p>
+
+    <div class="card">
+      <div class="card-title">Görev Tanımı Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Görev Adı</td><td>Metin</td></tr>
+          <tr><td>İş Birimi</td><td>Metin</td></tr>
+          <tr><td>Bağlı Pozisyon</td><td>Metin</td></tr>
+          <tr><td>Onay Durumu</td><td>Rozet (Beklemede / Onaylandı / Reddedildi)</td></tr>
+          <tr><td>Kayıt Tarihi</td><td>Tarih/Saat</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Görev Tanımı Formu — Tüm Alanlar</div>
+
+      <h4>Üst Bilgiler</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Personel Seçin</td><td>select / arama</td></tr>
+          <tr><td>İlk Yayın Tarihi</td><td>date</td></tr>
+          <tr><td>Revizyon Tarihi</td><td>date</td></tr>
+          <tr><td>Revizyon No</td><td>text</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Bölüm 1: Pozisyon ve Organizasyon Bilgileri</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Pozisyon Adı</td><td>text</td></tr>
+          <tr><td>Şirket Adı</td><td>text</td></tr>
+          <tr><td>İş Birimi</td><td>text</td></tr>
+          <tr><td>Lokasyon</td><td>text</td></tr>
+          <tr><td>Bağlı Olunan Üst (İdari)</td><td>text</td></tr>
+          <tr><td>Bağlı Olunan Üst (Fonksiyonel)</td><td>text</td></tr>
+          <tr><td>İştirakler</td><td>textarea</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Bölüm 2: Pozisyonun Amacı</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Pozisyonun Amacı</td><td>textarea (geniş)</td></tr>
+          <tr><td>Proje Portföyü Teslimat Performansı</td><td>textarea</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Bölüm 3: Süreçler, Yetkinlikler, RACI ve KPI Tablosu</h4>
+      <p>Satır bazlı düzenlenebilir tablo. Her satır bir görev kaydını temsil eder.</p>
+      <table>
+        <thead><tr><th>Sütun</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Süreç Adı</td><td>text input</td></tr>
+          <tr><td>Yetkinlik</td><td>text input</td></tr>
+          <tr><td>Davranış Göstergeleri</td><td>textarea</td></tr>
+          <tr><td>RACI</td><td>select (A / R / C / I)</td></tr>
+          <tr><td>KPI</td><td>text input</td></tr>
+          <tr><td>(İşlemler)</td><td>Satır sil butonu</td></tr>
+        </tbody>
+      </table>
+      <p>Buton: <strong>+ Yeni Görev Satırı Ekle</strong></p>
+
+      <h4>Bölüm 4: Genel Performans Göstergeleri (KPI Listesi)</h4>
+      <table>
+        <thead><tr><th>Alan</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>KPI Başlığı</td><td>text input</td></tr>
+          <tr><td>KPI Değeri / Açıklaması</td><td>text input</td></tr>
+        </tbody>
+      </table>
+      <p>Buton: <strong>+ Yeni KPI Ekle</strong></p>
+
+      <h4>Bölüm 5: Yönetsel Yetkinlikler</h4>
+      <table>
+        <thead><tr><th>Alan</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Yetkinlik Başlığı</td><td>text input</td></tr>
+          <tr><td>Yetkinlik Açıklaması</td><td>textarea</td></tr>
+        </tbody>
+      </table>
+      <p>Buton: <strong>+ Yeni Yönetsel Yetkinlik Ekle</strong></p>
+
+      <h4>Bölüm 6: Teknik / Mesleki Beceriler</h4>
+      <table>
+        <thead><tr><th>Alan</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Beceri</td><td>text input (tekrarlanabilir)</td></tr>
+        </tbody>
+      </table>
+      <p>Buton: <strong>+ Yeni Teknik Beceri Ekle</strong></p>
+
+      <h4>Bölüm 7: Bireysel Katkı Rolleri için Genel Kurallar</h4>
+      <table>
+        <thead><tr><th>Alan</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Kural (numaralı)</td><td>textarea (tekrarlanabilir)</td></tr>
+        </tbody>
+      </table>
+      <p>Buton: <strong>+ Yeni Kural Ekle</strong></p>
+
+      <h4>Form Butonları</h4>
+      <table>
+        <thead><tr><th>Buton</th><th>İşlev</th></tr></thead>
+        <tbody>
+          <tr><td>Kaydet</td><td>Görev tanımını veritabanına kaydeder</td></tr>
+          <tr><td>Excel'e Aktar</td><td>Mevcut formu Excel dosyası olarak indirir</td></tr>
+          <tr><td>Sıfırla</td><td>Formu temizler</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Görev Tanımı Onay Süreci</div>
+      <p>Kaydedilen görev tanımları onay durumları ile takip edilir.</p>
+      <table>
+        <thead><tr><th>Durum</th><th>Anlam</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-amber">Beklemede</span></td><td>Onay bekliyor</td></tr>
+          <tr><td><span class="badge badge-green">Onaylandı</span></td><td>Yönetici onayladı</td></tr>
+          <tr><td><span class="badge badge-red">Reddedildi</span></td><td>Yönetici reddetti</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. BORDRO -->
+  <section id="bordro">
+    <h2>5. Bordro</h2>
+    <p>Personel maaş hesaplamalarının yapıldığı, kaydedildiği ve onaylandığı modüldür.</p>
+
+    <div class="card">
+      <div class="card-title">Bordro Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Dönem</td><td>Metin (YYYY-MM)</td></tr>
+          <tr><td>Brüt Ücret</td><td>Para (₺)</td></tr>
+          <tr><td>Net Ücret</td><td>Para (₺)</td></tr>
+          <tr><td>SGK İşçi Payı</td><td>Para (₺)</td></tr>
+          <tr><td>Onay Durumu</td><td>Rozet</td></tr>
+          <tr><td>İşlemler</td><td>Görüntüle / PDF / Sil</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Bordro Hesaplama Formu</div>
+
+      <h4>Üst Seçim Alanları</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Personel Seçin</td><td>select</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Bordro Dönemi</td><td>month (YYYY-MM)</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Personel Tipi</td><td>toggle (Normal / Emekli)</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+
+      <h4>Bordro Parametreleri</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Medeni Durum</td><td>select (Bekar / Evli)</td></tr>
+          <tr><td>Çocuk Sayısı</td><td>number</td></tr>
+          <tr><td>Engellilik Durumu</td><td>select (Yok / 1.Derece / 2.Derece / 3.Derece)</td></tr>
+          <tr><td>SGK İşveren İndirim Oranı</td><td>select (%0 / %5 / %10...)</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Toplam Kazançlar</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Temel Kazanç</td><td>number (₺)</td><td>Brüt maaş</td></tr>
+          <tr><td>Yol Parası</td><td>number (₺)</td><td>Ulaşım desteği</td></tr>
+          <tr><td>Gıda Yardımı</td><td>number (₺)</td><td>Yemek desteği</td></tr>
+          <tr><td>Çocuk Yardımı</td><td>number (₺)</td><td>Çocuk başına yardım</td></tr>
+          <tr><td>Diğer Kazançlar</td><td>number (₺)</td><td>Ek ödemeler</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Ek Ödemeler</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Fazla Mesai %50 (Saat)</td><td>number</td><td>Hafta içi fazla mesai saati</td></tr>
+          <tr><td>Fazla Mesai %100 (Saat)</td><td>number</td><td>Hafta sonu/tatil mesai saati</td></tr>
+          <tr><td>Fazla Mesai (Manuel ₺)</td><td>number</td><td>Elle girilen fazla mesai tutarı</td></tr>
+          <tr><td>Haftalık Tatil</td><td>number (₺)</td><td>Haftalık tatil ücreti</td></tr>
+          <tr><td>Genel Tatil</td><td>number (₺)</td><td>Resmi tatil ücreti</td></tr>
+          <tr><td>Yıllık İzin Ücreti</td><td>number (₺)</td><td>Kullanılan yıllık izin karşılığı</td></tr>
+          <tr><td>İkramiye</td><td>number (₺)</td><td>Dönemsel ikramiye</td></tr>
+          <tr><td>Prim</td><td>number (₺)</td><td>Performans primi</td></tr>
+          <tr><td>Servis Ücreti</td><td>number (₺)</td><td>Servis / taşıma ücreti</td></tr>
+          <tr><td>Temsil / Etiket</td><td>number (₺)</td><td>Temsil giderleri</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Ek Kesintiler</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Avans</td><td>number (₺)</td><td>Verilen avans tutarı</td></tr>
+          <tr><td>Sendika Aidatı</td><td>number (₺)</td><td>Sendika üyelik aidatı</td></tr>
+          <tr><td>Diğer Kesintiler</td><td>number (₺)</td><td>Diğer kesintiler</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Otomatik Hesaplanan Alanlar (Salt Okunur)</h4>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Gelir Vergisi</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">Damga Vergisi</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">SGK İşçi Payı</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">İşsizlik Sigortası</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">Engelli İndirimi</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">Kıdem Tazminatı</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">İhbar Tazminatı</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">Toplam Kazanç</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">Toplam Kesinti</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">NET MAAŞ</div><div class="field-type">Hesaplanan (₺) — büyük ekran</div></div>
+        <div class="field-item"><div class="field-label">SGK İşveren Payı</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">SGK İşveren İndirimi</div><div class="field-type">Hesaplanan (₺)</div></div>
+        <div class="field-item"><div class="field-label">İşsizlik İşveren Payı</div><div class="field-type">Hesaplanan (₺)</div></div>
+      </div>
+
+      <h4>Form Butonları</h4>
+      <table>
+        <thead><tr><th>Buton</th><th>İşlev</th></tr></thead>
+        <tbody>
+          <tr><td>Kaydet</td><td>Bordroyu veritabanına kaydeder</td></tr>
+          <tr><td>PDF</td><td>Bordro özetini PDF olarak indirir</td></tr>
+          <tr><td>Onay İşlemi</td><td>Personele onay gönderir (passcode/imza)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6. İZİN YÖNETİMİ -->
+  <section id="izin">
+    <h2>6. İzin Yönetimi</h2>
+    <p>İzin taleplerinin oluşturulduğu, onaylandığı ve raporlandığı modüldür.</p>
+
+    <div class="card">
+      <div class="card-title">İzin Talepleri Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Departman</td><td>Metin</td></tr>
+          <tr><td>İzin Türü</td><td>Rozet</td></tr>
+          <tr><td>Başlangıç Tarihi</td><td>Tarih</td></tr>
+          <tr><td>Bitiş Tarihi</td><td>Tarih</td></tr>
+          <tr><td>Gün Sayısı</td><td>Sayı</td></tr>
+          <tr><td>Yol İzni</td><td>Gün / Yer</td></tr>
+          <tr><td>Durum</td><td>Rozet (Beklemede / Onaylandı / Reddedildi / İptal)</td></tr>
+          <tr><td>İşlemler</td><td>Onayla / Reddet / Görüntüle</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Yeni İzin Talebi Formu</div>
+
+      <h4>Personel Bilgileri</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>select</td><td><span class="badge badge-red">Evet</span></td></tr>
+        </tbody>
+      </table>
+
+      <h4>İzin Hakkı Bilgileri (Salt Okunur)</h4>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Toplam Yıllık İzin</div><div class="field-type">Gün (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Kalan İzin</div><div class="field-type">Gün (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Çalışma Yılı</div><div class="field-type">Yıl (salt okunur)</div></div>
+        <div class="field-item"><div class="field-label">Mazeret İzni</div><div class="field-type">Gün (salt okunur)</div></div>
+      </div>
+
+      <h4>İzin Detayları</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>İzin Türü</td><td>select</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Kısmi Yıllık İzin</td><td>checkbox</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Başlangıç Tarihi</td><td>date</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Bitiş Tarihi</td><td>date</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Açıklama</td><td>textarea</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+
+      <h4>İzin Türleri</h4>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Yıllık İzin</div></div>
+        <div class="field-item"><div class="field-label">Mazeret İzni</div></div>
+        <div class="field-item"><div class="field-label">Hastalık İzni</div></div>
+        <div class="field-item"><div class="field-label">Doğum İzni</div></div>
+        <div class="field-item"><div class="field-label">Babalık İzni</div></div>
+        <div class="field-item"><div class="field-label">Evlilik İzni</div></div>
+        <div class="field-item"><div class="field-label">Ölüm İzni</div></div>
+        <div class="field-item"><div class="field-label">Askerlik İzni</div></div>
+        <div class="field-item"><div class="field-label">Ücretsiz İzin</div></div>
+      </div>
+
+      <h4>Yol İzni (Yalnızca Yıllık İzin'de)</h4>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Yol İzni Talep</td><td>checkbox</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Yol İzni Günü</td><td>select (1-4 gün)</td><td><span class="badge badge-gray">Koşullu</span></td></tr>
+          <tr><td>Seyahat Yeri</td><td>text</td><td><span class="badge badge-gray">Koşullu</span></td></tr>
+          <tr><td>İl Dışı Seyahat</td><td>checkbox</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Destekleyici Belge</td><td>file (PDF/JPG/PNG, max 5 MB)</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+
+      <h4>Form Butonları</h4>
+      <table>
+        <thead><tr><th>Buton</th><th>İşlev</th></tr></thead>
+        <tbody>
+          <tr><td>Talebi Gönder</td><td>İzin talebini sisteme kaydeder</td></tr>
+          <tr><td>İptal</td><td>Formu kapatır</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">İzin Raporları — Filtreler</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Seçenekler</th></tr></thead>
+        <tbody>
+          <tr><td>Yıl</td><td>select</td><td>2022 / 2023 / 2024 ve sonrası</td></tr>
+          <tr><td>Departman</td><td>select</td><td>Tüm departmanlar + mevcut departmanlar</td></tr>
+          <tr><td>Rapor Türü</td><td>select</td><td>Özet / Detay / Haklar</td></tr>
+          <tr><td>CSV İndir</td><td>button</td><td>Mevcut raporu CSV olarak dışa aktarır</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Rapor Türü: Özet — İstatistik Kartları</h4>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Toplam Personel</div></div>
+        <div class="field-item"><div class="field-label">Toplam Talep</div></div>
+        <div class="field-item"><div class="field-label">Bekleyen Talep</div></div>
+        <div class="field-item"><div class="field-label">Onaylanan Talep</div></div>
+        <div class="field-item"><div class="field-label">Reddedilen Talep</div></div>
+      </div>
+
+      <h4>Departman Bazında Özet — Tablo Sütunları</h4>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Departman</td><td>Metin</td></tr>
+          <tr><td>Personel Sayısı</td><td>Sayı</td></tr>
+          <tr><td>Toplam Talep</td><td>Sayı</td></tr>
+          <tr><td>Onaylanan Gün</td><td>Sayı</td></tr>
+          <tr><td>Ortalama Gün</td><td>Sayı</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Rapor Türü: Haklar — Tablo Sütunları</h4>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Çalışma Yılı</td><td>Sayı</td></tr>
+          <tr><td>Toplam Hak</td><td>Gün</td></tr>
+          <tr><td>Kullanılan</td><td>Gün</td></tr>
+          <tr><td>Kalan</td><td>Gün</td></tr>
+          <tr><td>Kullanım %</td><td>İlerleme çubuğu</td></tr>
+          <tr><td>Mazeret İzni</td><td>Gün</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 7. KULLANICILAR -->
+  <section id="kullanicilar">
+    <h2>7. Kullanıcı Yönetimi</h2>
+    <p>Sisteme erişim yetkisi olan kullanıcıların yönetildiği modüldür.</p>
+
+    <div class="card">
+      <div class="card-title">Kullanıcı Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Kullanıcı</td><td>Ad + E-posta (rozet)</td></tr>
+          <tr><td>Rol</td><td>Rozet (Superadmin / Admin / HR / Manager / Employee / User)</td></tr>
+          <tr><td>Şirket</td><td>Şirket adı</td></tr>
+          <tr><td>Kayıt Tarihi</td><td>Tarih</td></tr>
+          <tr><td>İşlemler</td><td>Düzenle / Sil</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Filtreler</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Seçenekler</th></tr></thead>
+        <tbody>
+          <tr><td>Arama</td><td>text</td><td>Ad veya e-posta ile arama</td></tr>
+          <tr><td>Rol Filtresi</td><td>select</td><td>Tümü / Superadmin / Admin / HR / Manager / Employee / User</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Yeni Kullanıcı / Düzenle Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th><th>Not</th></tr></thead>
+        <tbody>
+          <tr><td>Ad Soyad</td><td>text</td><td><span class="badge badge-red">Evet</span></td><td></td></tr>
+          <tr><td>E-posta Adresi</td><td>email</td><td><span class="badge badge-red">Evet</span></td><td>Düzenleme modunda değiştirilemez</td></tr>
+          <tr><td>Şifre</td><td>password</td><td><span class="badge badge-red">Oluşturmada Evet</span></td><td>Min. 6 karakter</td></tr>
+          <tr><td>Rol</td><td>select</td><td><span class="badge badge-red">Evet</span></td><td>Superadmin / Admin / HR / Manager / Employee / User</td></tr>
+          <tr><td>Şirket</td><td>select</td><td><span class="badge badge-gray">Hayır</span></td><td>Superadmin için zorunlu olabilir</td></tr>
+        </tbody>
+      </table>
+      <h4>Butonlar</h4>
+      <table>
+        <thead><tr><th>Buton</th><th>İşlev</th></tr></thead>
+        <tbody>
+          <tr><td>Kullanıcı Oluştur / Kaydet</td><td>Kullanıcıyı sisteme ekler / günceller</td></tr>
+          <tr><td>İptal</td><td>Formu kapatır</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 8. SİSTEM AYARLARI -->
+  <section id="sistem">
+    <h2>8. Sistem Ayarları</h2>
+    <p>Şirket bilgilerinin ve sistem geneli parametrelerin yönetildiği modüldür.</p>
+
+    <div class="card">
+      <div class="card-title">Şirket Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Şirket Adı</td><td>Metin</td></tr>
+          <tr><td>Vergi No</td><td>Metin</td></tr>
+          <tr><td>SGK Sicil No</td><td>Metin</td></tr>
+          <tr><td>Şehir</td><td>Metin</td></tr>
+          <tr><td>Telefon</td><td>Metin</td></tr>
+          <tr><td>E-posta</td><td>Metin</td></tr>
+          <tr><td>İşlemler</td><td>Düzenle / Sil</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Yeni Şirket / Düzenle Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Şirket Adı</td><td>text</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Adres</td><td>textarea</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Vergi Numarası</td><td>text</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>SGK Sicil No</td><td>text</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Telefon</td><td>tel</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>E-posta</td><td>email</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Şehir</td><td>text</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Logo URL</td><td>text (URL)</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 9. TAKVİM -->
+  <section id="takvim">
+    <h2>9. Takvim</h2>
+    <p>Resmi tatiller, özel günler ve firma özel takvim etkinliklerinin yönetildiği modüldür.</p>
+
+    <div class="card">
+      <div class="card-title">Takvim Etkinlikleri — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Tarih</td><td>Tarih</td></tr>
+          <tr><td>Ad</td><td>Metin</td></tr>
+          <tr><td>Tür</td><td>Rozet (Resmi Tatil / Dini Bayram / Özel Gün / Firma Özel)</td></tr>
+          <tr><td>Açıklama</td><td>Metin</td></tr>
+          <tr><td>Çalışma Günü mü?</td><td>Evet / Hayır</td></tr>
+          <tr><td>İşlemler</td><td>Düzenle / Sil</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Yeni Etkinlik Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Tarih</td><td>date</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Ad</td><td>text</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Tür</td><td>select (Resmi Tatil / Dini Bayram / Özel Gün / Firma Özel)</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Açıklama</td><td>text</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Çalışma Günü mü?</td><td>checkbox</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Yıl</td><td>number</td><td><span class="badge badge-red">Evet</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 10. ARAMA -->
+  <section id="arama">
+    <h2>10. Arama</h2>
+    <p>Sistem genelinde personel, bordro ve izin kayıtlarında arama yapılabilen modüldür.</p>
+
+    <div class="card">
+      <div class="card-title">Arama Alanları</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Arama Kapsamı</th></tr></thead>
+        <tbody>
+          <tr><td>Arama Metni</td><td>text</td><td>Personel adı, departman, pozisyon, bordro dönemi</td></tr>
+          <tr><td>Kategori Filtresi</td><td>select / toggle</td><td>Personel / İzin / Bordro / Görev Tanımı</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Arama Sonuçları</div>
+      <p>Sonuçlar kategorilere göre gruplandırılır. Her sonuç kartı ilgili modüle yönlendiren bir bağlantı içerir.</p>
+    </div>
+  </section>
+
+  <div style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 12px;">
+    İK Yönetim Sistemi — Kullanım Kılavuzu &nbsp;|&nbsp; Versiyon 1.0 &nbsp;|&nbsp; 2026
+  </div>
+
+</main>
+</div>
+
+<script>
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }, { passive: true });
+
+  // Sağ tık → uygulamada ilgili sayfaya git (sadece iframe içindeyken)
+  const SECTION_VIEW_MAP = {
+    'giris-ekrani': 'personel',
+    'personel': 'personel',
+    'ozluk': 'ozluk-dosyasi',
+    'gorev': 'gorev-tanimi',
+    'bordro': 'bordro',
+    'izin': 'izin',
+    'kullanicilar': 'kullanicilar',
+    'sistem': 'ayar',
+    'takvim': 'uyari',
+    'arama': 'arama',
+  };
+
+  const isEmbedded = window.parent !== window;
+
+  if (isEmbedded) {
+    let activeMenu = null;
+
+    const removeMenu = () => {
+      if (activeMenu) { activeMenu.remove(); activeMenu = null; }
+    };
+
+    document.addEventListener('contextmenu', (e) => {
+      const section = e.target.closest('section[id]');
+      const view = section ? SECTION_VIEW_MAP[section.id] : null;
+      if (!view) return;
+
+      e.preventDefault();
+      removeMenu();
+
+      const title = section.querySelector('h2')?.textContent?.trim() || section.id;
+
+      const menu = document.createElement('div');
+      menu.style.cssText = [
+        'position:fixed',
+        `left:${Math.min(e.clientX, window.innerWidth - 240)}px`,
+        `top:${Math.min(e.clientY, window.innerHeight - 60)}px`,
+        'background:#fff',
+        'border:1px solid #e2e8f0',
+        'border-radius:10px',
+        'box-shadow:0 8px 24px rgba(0,0,0,0.12)',
+        'padding:4px',
+        'z-index:10000',
+        'min-width:220px',
+        'font-family:Segoe UI,Arial,sans-serif',
+      ].join(';');
+
+      const btn = document.createElement('button');
+      btn.textContent = '→ Uygulamada bu sayfaya git';
+      btn.title = title;
+      btn.style.cssText = [
+        'display:block',
+        'width:100%',
+        'padding:9px 14px',
+        'background:none',
+        'border:none',
+        'text-align:left',
+        'cursor:pointer',
+        'font-size:13px',
+        'font-weight:600',
+        'color:#1d4ed8',
+        'border-radius:7px',
+        'white-space:nowrap',
+        'overflow:hidden',
+        'text-overflow:ellipsis',
+      ].join(';');
+      btn.onmouseover = () => btn.style.background = '#eff6ff';
+      btn.onmouseout  = () => btn.style.background = 'none';
+      btn.onclick = () => {
+        window.parent.postMessage({ type: 'navigate', view }, '*');
+        removeMenu();
+      };
+
+      menu.appendChild(btn);
+      document.body.appendChild(menu);
+      activeMenu = menu;
+
+      setTimeout(() => document.addEventListener('click', removeMenu, { once: true }), 0);
+    });
+  }
+</script>
+</body>
+</html>
