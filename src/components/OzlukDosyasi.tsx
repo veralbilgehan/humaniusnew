@@ -156,6 +156,12 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
   const [yeniYazi, setYeniYazi] = useState<Record<string, string>>({});
   const [yaziKaydediliyor, setYaziKaydediliyor] = useState<Record<string, boolean>>({});
 
+  // Yedekleme
+  const [showBackupModal, setShowBackupModal] = useState(false);
+  const [backupSifre, setBackupSifre] = useState('');
+  const [backupHata, setBackupHata] = useState('');
+  const [backupBasarili, setBackupBasarili] = useState(false);
+
   const selectedEmp = companyEmployees.find((e) => e.id === selectedEmpId) ?? null;
 
   // Görev tanımlarını yükle
@@ -276,6 +282,99 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
     }
   };
 
+  // Yedekleme işlemi
+  const handleBackup = () => {
+    if (!selectedEmp) return;
+    const dogru = selectedEmp.approval_passcode;
+    if (dogru && backupSifre !== dogru) {
+      setBackupHata('Şifre hatalı, yedekleme yapılamadı.');
+      return;
+    }
+
+    const empBordroForBackup = bordrolar.filter((b) => b.employee_id === selectedEmpId);
+    const empIzinHakkiForBackup = izinHaklari.find((h) => h.employeeId === selectedEmpId);
+    const empIzinTalepleriForBackup = izinTalepleri.filter((t) => t.employeeId === selectedEmpId);
+
+    const yedek = {
+      tarih: new Date().toISOString(),
+      personel: {
+        id: selectedEmp.id,
+        ad_soyad: selectedEmp.name,
+        tc_no: selectedEmp.tc_no ?? '-',
+        sicil_no: selectedEmp.sicil_no ?? '-',
+        departman: selectedEmp.department,
+        pozisyon: selectedEmp.position,
+        ise_giris: selectedEmp.join_date,
+        telefon: selectedEmp.phone,
+        email: selectedEmp.email,
+        adres: selectedEmp.address,
+        personel_turu: selectedEmp.employeeType,
+        durum: selectedEmp.status,
+      },
+      belge_kategoriler: BELGE_KATEGORILER.map((k) => ({
+        id: k.id,
+        baslik: k.label,
+        aciklama: k.aciklama,
+        dosyalar: dosyaByKategori(k.id).map((d) => ({
+          ad: d.dosya_adi,
+          not: d.notlar,
+          tarih: d.created_at,
+        })),
+      })),
+      tutanaklar: dosyaByKategori('tutanak').map((d) => ({
+        ad: d.dosya_adi,
+        not: d.notlar,
+        tarih: d.created_at,
+      })),
+      sikayetler: dosyaByKategori('sikayet').map((d) => ({
+        ad: d.dosya_adi,
+        not: d.notlar,
+        tarih: d.created_at,
+      })),
+      bordrolar: empBordroForBackup
+        .sort((a, b) => b.period.localeCompare(a.period))
+        .map((b) => ({
+          donem: b.period,
+          brut: b.brut_maas,
+          net: b.net_maas,
+          sgk: b.sgk_isci_payi,
+        })),
+      izin_hakki: empIzinHakkiForBackup
+        ? {
+            toplam: empIzinHakkiForBackup.toplamHak,
+            kullanilan: empIzinHakkiForBackup.kullanilanIzin,
+            kalan: empIzinHakkiForBackup.kalanIzin,
+            calisma_yili: empIzinHakkiForBackup.calismaYili,
+          }
+        : null,
+      izin_talepleri: empIzinTalepleriForBackup.map((t) => ({
+        tur: t.izinTuru,
+        baslangic: t.baslangicTarihi,
+        bitis: t.bitisTarihi,
+        gun: t.gunSayisi,
+        durum: t.durum,
+      })),
+      gorev_tanimlari: gorevTanimlari.map((g) => ({
+        ad: g.gorev_adi,
+        aciklama: g.gorev_aciklama,
+        sorumluluklar: g.sorumluluklar,
+        yetki_sorumluluklar: g.yetki_ve_sorumluluklar,
+        performans: g.performans_kriterleri,
+        calismalar: g.calismalar,
+        onay_tarihi: g.onay_tarihi,
+      })),
+    };
+
+    localStorage.setItem(`ozluk_yedek_${selectedEmpId}`, JSON.stringify(yedek));
+    setBackupBasarili(true);
+    setBackupHata('');
+    setBackupSifre('');
+    setTimeout(() => {
+      setShowBackupModal(false);
+      setBackupBasarili(false);
+    }, 2000);
+  };
+
   // İzin verileri
   const empIzinHakki = selectedEmpId
     ? izinHaklari.find((h) => h.employeeId === selectedEmpId)
@@ -358,16 +457,26 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
           </div>
         </div>
         {selectedEmp && (
-          <div className="flex items-center gap-3 bg-blue-50 rounded-xl px-4 py-2">
-            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
-              {selectedEmp.name.charAt(0).toUpperCase()}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 bg-blue-50 rounded-xl px-4 py-2">
+              <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                {selectedEmp.name.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{selectedEmp.name}</p>
+                <p className="text-xs text-gray-500">
+                  {selectedEmp.department} • {selectedEmp.position}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-900">{selectedEmp.name}</p>
-              <p className="text-xs text-gray-500">
-                {selectedEmp.department} • {selectedEmp.position}
-              </p>
-            </div>
+            <button
+              onClick={() => { setShowBackupModal(true); setBackupSifre(''); setBackupHata(''); setBackupBasarili(false); }}
+              className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 active:scale-95 transition-all shadow-sm"
+              title="Özlük dosyasını yerel depoya yedekle"
+            >
+              <Download className="w-4 h-4" />
+              Yedekle
+            </button>
           </div>
         )}
       </div>
@@ -377,6 +486,68 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
           <FolderOpen className="w-12 h-12 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500 font-medium">Özlük dosyasını görüntülemek için personel seçin</p>
           <p className="text-gray-400 text-sm mt-1">Yukarıdaki listeden bir çalışan seçerek devam edin</p>
+        </div>
+      )}
+
+      {/* Yedekleme şifre modalı */}
+      {showBackupModal && selectedEmp && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-gray-900">Özlük Dosyası Yedekle</h3>
+              <button
+                onClick={() => { setShowBackupModal(false); setBackupSifre(''); setBackupHata(''); }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              <strong>{selectedEmp.name}</strong> adlı personelin tüm özlük bilgileri
+              (belgeler, bordro, izin, görev tanımı, tutanaklar) yerel depolamaya kaydedilecek.
+              {selectedEmp.approval_passcode
+                ? ' Devam etmek için onay şifresini girin.'
+                : ' Şifre tanımlanmamış, doğrulama atlanır.'}
+            </p>
+            {backupBasarili ? (
+              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-xl">
+                <CheckCircle className="w-5 h-5 text-green-600 shrink-0" />
+                <p className="text-sm font-medium text-green-700">Yedekleme başarıyla tamamlandı!</p>
+              </div>
+            ) : (
+              <>
+                {selectedEmp.approval_passcode && (
+                  <input
+                    type="password"
+                    value={backupSifre}
+                    onChange={(e) => { setBackupSifre(e.target.value); setBackupHata(''); }}
+                    onKeyDown={(e) => e.key === 'Enter' && handleBackup()}
+                    placeholder="Onay şifresi"
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                    autoFocus
+                  />
+                )}
+                {backupHata && (
+                  <p className="text-xs text-red-600 mb-2">{backupHata}</p>
+                )}
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={() => { setShowBackupModal(false); setBackupSifre(''); setBackupHata(''); }}
+                    className="flex-1 px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-50"
+                  >
+                    İptal
+                  </button>
+                  <button
+                    onClick={handleBackup}
+                    disabled={!!selectedEmp.approval_passcode && !backupSifre.trim()}
+                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    Yedekle
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       )}
 

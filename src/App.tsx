@@ -24,6 +24,21 @@ import KullanicilarPage from './components/KullanicilarPage';
 import IzinOzetKartlari from './components/IzinOzetKartlari';
 import AIBrowserPage from './browser/AIBrowserPage';
 import GuideContextMenu from './components/GuideContextMenu';
+import PDKSYonetimi from './components/PDKSYonetimi';
+import PerformansYonetimi from './components/PerformansYonetimi';
+import IseAlimATS from './components/IseAlimATS';
+import EgitimLMS from './components/EgitimLMS';
+import AnalitiKDashboard from './components/AnalitiKDashboard';
+import KVKKUyumluluk from './components/KVKKUyumluluk';
+import IzinTanimlari from './components/IzinTanimlari';
+import OrganizasyonSemasi from './components/OrganizasyonSemasi';
+import ZimmetYonetimi from './components/ZimmetYonetimi';
+import OKRYonetimi from './components/OKRYonetimi';
+import YetkinlikMatrisi from './components/YetkinlikMatrisi';
+import OnboardingAkisi from './components/OnboardingAkisi';
+import EsnekYanHaklar from './components/EsnekYanHaklar';
+import IzinCakismaKontrol from './components/IzinCakismaKontrol';
+import DinamikFormBuilder from './components/DinamikFormBuilder';
 import { employeeService } from './services/employeeService';
 import { companyService } from './services/companyService';
 import { izinService } from './services/izinService';
@@ -164,10 +179,10 @@ const AppInner: React.FC = () => {
       const depts = [...new Set(mapped.map((e) => e.department).filter(Boolean))];
       setDepartments(depts);
 
-      // Şirket listesi
+      // Şirket listesi — sadece giriş yapan kullanıcının şirketi
       try {
-        const compData = await companyService.getCompanies();
-        setCompanies((compData ?? []).map((c: any) => c.name));
+        const compData = await companyService.getById(profile.company_id);
+        setCompanies(compData ? [compData.name] : []);
       } catch {}
 
       // İzin talepleri
@@ -760,6 +775,64 @@ const AppInner: React.FC = () => {
             izinHaklari={izinHaklari}
           />
         )}
+
+        {/* PDKS */}
+        {currentView === 'pdks' && (
+          <PDKSYonetimi
+            employees={employees}
+            izinTalepleri={izinTalepleri}
+            bordrolar={bordrolar}
+          />
+        )}
+
+        {/* Performans */}
+        {currentView === 'performans' && <PerformansYonetimi employees={employees} />}
+
+        {/* İşe Alım ATS */}
+        {currentView === 'ise-alim' && <IseAlimATS />}
+
+        {/* Eğitim LMS */}
+        {currentView === 'egitim' && <EgitimLMS employees={employees} />}
+
+        {/* Analitik Dashboard */}
+        {currentView === 'analitik' && (
+          <AnalitiKDashboard
+            employees={employees}
+            izinTalepleri={izinTalepleri}
+            izinHaklari={izinHaklari}
+            bordrolar={bordrolar}
+          />
+        )}
+
+        {/* KVKK Uyumluluk */}
+        {currentView === 'kvkk' && <KVKKUyumluluk />}
+
+        {/* İzin Türleri Tanımları */}
+        {currentView === 'izin-tanimlari' && <IzinTanimlari />}
+
+        {/* Organizasyon Şeması */}
+        {currentView === 'org-sema' && <OrganizasyonSemasi employees={employees} />}
+
+        {/* Zimmet Yönetimi */}
+        {currentView === 'zimmet' && <ZimmetYonetimi employees={employees} />}
+
+        {/* OKR Yönetimi */}
+        {currentView === 'okr' && <OKRYonetimi employees={employees} />}
+
+        {/* Yetkinlik Matrisi */}
+        {currentView === 'yetkinlik' && <YetkinlikMatrisi employees={employees} />}
+
+        {/* ATS → Onboarding Akışı */}
+        {currentView === 'onboarding' && <OnboardingAkisi />}
+
+        {/* Esnek Yan Haklar */}
+        {currentView === 'yan-haklar' && <EsnekYanHaklar employees={employees} />}
+
+        {/* İzin Çakışma Kontrolü */}
+        {currentView === 'izin-cakisma' && <IzinCakismaKontrol employees={employees} />}
+
+        {/* Dinamik Form Builder */}
+        {currentView === 'form-builder' && <DinamikFormBuilder />}
 
         {/* Uyarılar & Takvim */}
         {currentView === 'uyari' && (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Users, Calendar, FileText, CreditCard, Bell, Settings, CreditCard as Edit2, SearchIcon, LogOut, BookOpen, UserCog } from 'lucide-react';
+import { Search, Users, Calendar, FileText, CreditCard, Bell, Settings, CreditCard as Edit2, SearchIcon, LogOut, BookOpen, UserCog, Clock, BarChart2, UserPlus, GraduationCap, TrendingUp, Shield, ListChecks, Building2, Package, Target, Award, PlayCircle, Gift, CalendarX, FormInput } from 'lucide-react';
 import { View } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -104,11 +104,26 @@ const Sidebar: React.FC<SidebarProps> = ({
       { id: 'gorev-tanimi-kayitlari' as View, label: 'Görev Tanımı Kayıtları' },
       { id: 'ozluk-dosyasi' as View, label: 'Özlük Dosyası' },
     ]},
+    { id: 'pdks' as View, label: 'PDKS & Devam Kontrol', icon: Clock },
     { id: 'bordro' as View, label: t('sidebar.payroll'), icon: CreditCard, children: [
       { id: 'bordro-onay' as View, label: 'Bordro Onay İşlemleri' }
     ]},
     { id: 'izin' as View, label: t('sidebar.leaveManagement'), icon: Calendar },
+    { id: 'performans' as View, label: 'Performans & Geri Bildirim', icon: BarChart2 },
+    { id: 'ise-alim' as View, label: 'İşe Alım & ATS', icon: UserPlus },
+    { id: 'egitim' as View, label: 'Eğitim & Gelişim (LMS)', icon: GraduationCap },
+    { id: 'analitik' as View, label: 'Veri Analitiği', icon: TrendingUp },
+    { id: 'org-sema' as View, label: 'Organizasyon Şeması', icon: Building2 },
+    { id: 'zimmet' as View, label: 'Zimmet Yönetimi', icon: Package },
+    { id: 'okr' as View, label: 'OKR & Hedefler', icon: Target },
+    { id: 'yetkinlik' as View, label: 'Yetkinlik Matrisi', icon: Award },
+    { id: 'onboarding' as View, label: 'Onboarding Akışı', icon: PlayCircle },
+    { id: 'yan-haklar' as View, label: 'Esnek Yan Haklar', icon: Gift },
+    { id: 'izin-cakisma' as View, label: 'İzin Çakışma Kontrolü', icon: CalendarX },
+    { id: 'form-builder' as View, label: 'Dinamik Form Builder', icon: FormInput },
     { id: 'raporlar' as View, label: t('sidebar.reports'), icon: FileText },
+    { id: 'izin-tanimlari' as View, label: 'İzin Türleri Tanımları', icon: ListChecks },
+    { id: 'kvkk' as View, label: 'KVKK / GDPR Uyumluluk', icon: Shield },
     { id: 'uyari' as View, label: t('sidebar.alertsCalendar'), icon: Bell },
     { id: 'kullanicilar' as View, label: 'Kullanıcılar', icon: UserCog },
     { id: 'ayar' as View, label: t('sidebar.systemSettings'), icon: Settings },

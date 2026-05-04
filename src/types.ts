@@ -14,7 +14,22 @@ export type View =
   | 'gorev-tanimi-kayitlari'
   | 'ozluk-dosyasi'
   | 'arama'
-  | 'kullanim-kilavuzu';
+  | 'kullanim-kilavuzu'
+  | 'pdks'
+  | 'performans'
+  | 'ise-alim'
+  | 'egitim'
+  | 'analitik'
+  | 'kvkk'
+  | 'izin-tanimlari'
+  | 'org-sema'
+  | 'zimmet'
+  | 'okr'
+  | 'yetkinlik'
+  | 'onboarding'
+  | 'yan-haklar'
+  | 'izin-cakisma'
+  | 'form-builder';
 
 // ─── Core Entities ───────────────────────────────────────────────────────────
 
