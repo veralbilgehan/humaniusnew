@@ -587,7 +587,7 @@ const SistemAyarlari: React.FC = () => {
         <div className="mt-8 border-t border-gray-200 pt-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800">Kullanıcı ve Şirket Yönetimi</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Personel ve Şirket Yönetimi</h3>
               <p className="text-sm text-gray-600">Yeni kullanıcı/şirket ekleme, düzenleme ve silme işlemleri</p>
             </div>
             {canManage && (
@@ -813,48 +813,6 @@ const SistemAyarlari: React.FC = () => {
                   </div>
                 </form>
               )}
-
-              <div className="mt-5 grid gap-4 lg:grid-cols-2">
-                <div className="rounded-xl border border-blue-200 bg-blue-50 overflow-hidden">
-                  <div className="border-b border-blue-200 px-4 py-3">
-                    <h4 className="text-sm font-semibold text-blue-800">Eklenen Kullanıcılar</h4>
-                  </div>
-                  <div className="max-h-64 overflow-y-auto bg-white">
-                    {users.length === 0 ? (
-                      <p className="px-4 py-4 text-sm text-gray-500">Henüz kullanıcı eklenmedi.</p>
-                    ) : (
-                      <ul className="divide-y divide-gray-100">
-                        {users.slice(0, 12).map((targetUser) => (
-                          <li key={`quick-user-${targetUser.id}`} className="px-4 py-3">
-                            <p className="text-sm font-medium text-gray-800">{targetUser.full_name}</p>
-                            <p className="text-xs text-gray-500">{targetUser.email} • {targetUser.role}</p>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-cyan-200 bg-cyan-50 overflow-hidden">
-                  <div className="border-b border-cyan-200 px-4 py-3">
-                    <h4 className="text-sm font-semibold text-cyan-800">Eklenen Şirketler</h4>
-                  </div>
-                  <div className="max-h-64 overflow-y-auto bg-white">
-                    {companies.length === 0 ? (
-                      <p className="px-4 py-4 text-sm text-gray-500">Henüz şirket eklenmedi.</p>
-                    ) : (
-                      <ul className="divide-y divide-gray-100">
-                        {companies.slice(0, 12).map((company) => (
-                          <li key={`quick-company-${company.id}`} className="px-4 py-3">
-                            <p className="text-sm font-medium text-gray-800">{company.name}</p>
-                            <p className="text-xs text-gray-500">{company.city || 'İl belirtilmedi'} • {company.email || 'Email yok'}</p>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-              </div>
 
               <div className="mt-5 rounded-xl border border-gray-200 bg-white overflow-hidden">
                 {manageLoading ? (

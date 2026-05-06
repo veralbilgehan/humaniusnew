@@ -17,7 +17,8 @@ import {
   User,
   RefreshCw,
 } from 'lucide-react';
-import { userService, type UserProfile, type CreateUserData } from '../services/userService';
+import { userService, type UserProfile } from '../services/userService';
+import { userManagementService } from '../services/userManagementService';
 import { companyService } from '../services/companyService';
 import { useAuth } from '../contexts/AuthContext';
 import { getRoleLabel } from '../auth/roles';
@@ -117,16 +118,10 @@ const UserModal: React.FC<UserModalProps> = ({
           full_name:  form.full_name.trim(),
           role:       form.role,
           company_id: form.company_id || null,
-        } as CreateUserData);
-
-        if (!result.success) {
-          setError(result.error ?? 'Kullanıcı oluşturulamadı');
-        } else if (result.needsEmailConfirm) {
-          setInfo('Kullanıcı oluşturuldu. Email onayı bekleniyor — kullanıcıya onay maili gönderildi.');
-          setTimeout(onSuccess, 3000);
-        } else {
-          onSuccess();
-        }
+        });
+        if (!result.success) throw new Error(result.error ?? 'Kullanıcı oluşturulamadı');
+        if (result.warning) setInfo(result.warning);
+        onSuccess();
       } else if (mode === 'edit' && initial) {
         await userService.updateProfile(
           initial.id,
@@ -444,6 +439,7 @@ const KullanicilarPage: React.FC = () => {
           );
         })}
       </div>
+
 
       {/* Filters */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">

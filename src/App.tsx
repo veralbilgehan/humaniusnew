@@ -781,7 +781,6 @@ const AppInner: React.FC = () => {
           <PDKSYonetimi
             employees={employees}
             izinTalepleri={izinTalepleri}
-            bordrolar={bordrolar}
           />
         )}
 

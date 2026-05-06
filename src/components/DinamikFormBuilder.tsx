@@ -292,7 +292,7 @@ const DinamikFormBuilder: React.FC = () => {
     <div className="space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-xl font-bold text-gray-800">Dinamik Form Builder</h2>
+          <h2 className="text-xl font-bold text-gray-800">Dinamik Form</h2>
           <p className="text-sm text-gray-500 mt-0.5">Özlük formuna özel alanlar ekleyin, sürükle-bırak ile sıralayın</p>
         </div>
         <div className="flex gap-2">

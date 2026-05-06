@@ -4,6 +4,7 @@ import { Employee } from '../types';
 import { IzinTalebi, IzinHakki, IzinTuru } from '../types/izin';
 import { calculateWorkingDays, izinTuruLabels, getMaxIzinSureleri, validateIzinTuru } from '../utils/izinCalculations';
 import { useScrollLock } from '../hooks/useScrollLock';
+import PasscodeVerificationModal from './PasscodeVerificationModal';
 
 interface IzinTalepFormProps {
   employees: Employee[];
@@ -39,6 +40,8 @@ const IzinTalepForm: React.FC<IzinTalepFormProps> = ({
   const [validationError, setValidationError] = useState<string>('');
   const [belgeDosyasi, setBelgeDosyasi] = useState<File | null>(null);
   const [belgeYuklendi, setBelgeYuklendi] = useState(false);
+  const [showPasscodeModal, setShowPasscodeModal] = useState(false);
+  const [pendingTalepData, setPendingTalepData] = useState<Partial<IzinTalebi> | null>(null);
 
   // Seçili izin türü için maksimum süre bilgisi
   const maxSureInfo = getMaxIzinSureleri(formData.izinTuru);
@@ -189,12 +192,27 @@ const IzinTalepForm: React.FC<IzinTalepFormProps> = ({
       return;
     }
 
-    onSubmit({
+    const talepData = {
       ...formData,
       bitisTarihi: formData.bitisTarihi,
       gunSayisi,
       belgeDosyasi: belgeDosyasi
-    });
+    };
+
+    // Şifre tanımlıysa modal aç, değilse direkt gönder
+    if (selectedEmployee?.approval_passcode) {
+      setPendingTalepData(talepData);
+      setShowPasscodeModal(true);
+    } else {
+      onSubmit(talepData);
+    }
+  };
+
+  const handlePasscodeVerify = async (passcode: string): Promise<boolean> => {
+    const stored = selectedEmployee?.approval_passcode;
+    if (!stored || stored !== passcode) return false;
+    if (pendingTalepData) onSubmit(pendingTalepData);
+    return true;
   };
 
   const handleInputChange = (field: string, value: any) => {
@@ -208,6 +226,7 @@ const IzinTalepForm: React.FC<IzinTalepFormProps> = ({
   const minDate = new Date().toISOString().split('T')[0];
 
   return (
+    <>
     <div className="fixed inset-0 z-50">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} />
       <div className="fixed inset-y-0 right-0 max-w-2xl w-full bg-white border-l border-gray-200 transform transition-transform duration-300 translate-x-0 flex flex-col">
@@ -535,6 +554,21 @@ const IzinTalepForm: React.FC<IzinTalepFormProps> = ({
         </div>
       </div>
     </div>
+
+    {showPasscodeModal && selectedEmployee && (
+      <PasscodeVerificationModal
+        isOpen={showPasscodeModal}
+        onClose={() => setShowPasscodeModal(false)}
+        onVerify={handlePasscodeVerify}
+        employeeName={selectedEmployee.name}
+        title="Güvenli Belge Onayı"
+        actionLabel="İzin Talebini Gönder"
+        actionDescription={`${selectedEmployee.name} adına ${gunSayisi} günlük izin talebi gönderilecek.`}
+        actionColor="blue"
+        tcNo={selectedEmployee.tc_no ?? undefined}
+      />
+    )}
+    </>
   );
 };
 

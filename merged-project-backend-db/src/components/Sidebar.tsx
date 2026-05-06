@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Users, Calendar, FileText, CreditCard, Bell, Settings, CreditCard as Edit2, SearchIcon, FolderOpen } from 'lucide-react';
+import { Search, Users, Calendar, FileText, CreditCard, Bell, CreditCard as Edit2, SearchIcon, FolderOpen, GraduationCap, ChevronDown } from 'lucide-react';
 import { View } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -44,6 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const { user, profile, appRole } = useAuth();
   const effectiveRole = user ? appRole : 'admin';
   const [showLogoEditor, setShowLogoEditor] = useState(false);
+  const [openSections, setOpenSections] = useState<View[]>([]);
   const [logoSrc, setLogoSrc] = useState(DEFAULT_LOGO_SRC);
   const [logoConfig, setLogoConfig] = useState<LogoConfig>({
     width: 225,
@@ -103,15 +104,46 @@ const Sidebar: React.FC<SidebarProps> = ({
       { id: 'gorev-tanimi' as View, label: 'Görev Tanımı' },
       { id: 'gorev-tanimi-kayitlari' as View, label: 'Görev Tanımı Kayıtları' },
       { id: 'ozluk-dosyasi' as View, label: 'Özlük Dosyası' },
+      { id: 'ise-alim' as View, label: 'İşe Alım & ATS' },
+      { id: 'org-sema' as View, label: 'Organizasyon Şeması' },
+      { id: 'zimmet' as View, label: 'Zimmet Yönetimi' },
+      { id: 'kullanicilar' as View, label: 'Kullanıcılar' },
+      { id: 'ayar' as View, label: 'Personel ve Şirket Yönetimi' },
     ]},
     { id: 'bordro' as View, label: t('sidebar.payroll'), icon: CreditCard, children: [
-      { id: 'bordro-onay' as View, label: 'Bordro Onay İşlemleri' }
+      { id: 'bordro' as View, label: 'Bordro' },
+      { id: 'bordro-onay' as View, label: 'Bordro Onay İşlemleri' },
+      { id: 'yan-haklar' as View, label: 'Esnek Yan Haklar' },
     ]},
-    { id: 'izin' as View, label: t('sidebar.leaveManagement'), icon: Calendar },
-    { id: 'raporlar' as View, label: t('sidebar.reports'), icon: FileText },
+    { id: 'izin' as View, label: t('sidebar.leaveManagement'), icon: Calendar, children: [
+      { id: 'izin-cakisma' as View, label: 'İzin Çakışma Kontrolü' },
+      { id: 'izin-tanimlari' as View, label: 'İzin Türleri Tanımları' },
+    ]},
+    { id: 'egitim' as View, label: 'Eğitim & Gelişim (LMS)', icon: GraduationCap, children: [
+      { id: 'yetkinlik' as View, label: 'Yetkinlik Matrisi' },
+      { id: 'onboarding' as View, label: 'Onboarding Akışı' },
+    ]},
+    { id: 'raporlar' as View, label: t('sidebar.reports'), icon: FileText, children: [
+      { id: 'analitik' as View, label: 'Veri Analitiği' },
+      { id: 'okr' as View, label: 'OKR Hedefler' },
+      { id: 'form-builder' as View, label: 'Dinamik Form' },
+      { id: 'performans' as View, label: 'Performans & Geri Bildirim' },
+    ]},
     { id: 'uyari' as View, label: t('sidebar.alertsCalendar'), icon: Bell },
-    { id: 'ayar' as View, label: t('sidebar.systemSettings'), icon: Settings },
   ].filter((item) => canAccessView(effectiveRole, item.id));
+
+  React.useEffect(() => {
+    const currentParent = navItems.find(
+      (item) => item.children && item.children.some((child) => child.id === currentView)
+    );
+
+    if (!currentParent) return;
+
+    setOpenSections((prev) => {
+      if (prev.includes(currentParent.id)) return prev;
+      return [...prev, currentParent.id];
+    });
+  }, [currentView, navItems]);
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 p-5 sticky top-0 h-screen overflow-y-auto shadow-sm">
@@ -173,22 +205,41 @@ const Sidebar: React.FC<SidebarProps> = ({
           const Icon = item.icon;
           const isActive = currentView === item.id;
           const hasChildren = item.children && item.children.length > 0;
+          const hasActiveChild = Boolean(hasChildren && item.children.some((child) => child.id === currentView));
+          const isSectionOpen = openSections.includes(item.id);
+          const isHighlighted = isActive || hasActiveChild;
 
           return (
             <div key={item.id}>
               <button
-                onClick={() => onViewChange(item.id)}
+                onClick={() => {
+                  if (hasChildren) {
+                    setOpenSections((prev) =>
+                      prev.includes(item.id)
+                        ? prev.filter((sectionId) => sectionId !== item.id)
+                        : [...prev, item.id]
+                    );
+                    return;
+                  }
+
+                  onViewChange(item.id);
+                }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
-                  isActive
+                  isHighlighted
                     ? 'bg-blue-50 border border-blue-200 text-blue-700'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-800 border border-transparent'
                 }`}
               >
-                {isActive && <div className="w-2 h-2 rounded-full bg-blue-500" />}
+                {isHighlighted && <div className="w-2 h-2 rounded-full bg-blue-500" />}
                 <Icon className="w-4 h-4" />
                 <span className="font-medium">{item.label}</span>
+                {hasChildren && (
+                  <ChevronDown
+                    className={`ml-auto h-4 w-4 transition-transform ${isSectionOpen ? 'rotate-180' : ''}`}
+                  />
+                )}
               </button>
-              {hasChildren && (
+              {hasChildren && isSectionOpen && (
                 <div className="ml-8 mt-1 space-y-1">
                   {item.children.map(child => {
                     const isChildActive = currentView === child.id;

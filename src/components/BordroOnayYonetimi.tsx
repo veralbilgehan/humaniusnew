@@ -380,6 +380,7 @@ const BordroOnayYonetimi: React.FC = () => {
           }}
           onVerify={handlePasscodeVerify}
           employeeName={currentAction.employeeName}
+          title="Güvenli Belge Onayı"
           actionType={currentAction.type}
         />
       )}

@@ -204,7 +204,7 @@ const BordroCalculator: React.FC<BordroCalculatorProps> = ({ employees, onSaveBo
       // Veritabanı hatası olsa bile kullanıcı akışını kesmeyelim; yerelde devam et.
       const localBordro = {
         ...calculatedBordro,
-        id: calculatedBordro.id || `${selectedEmployee.id}-${period}`,
+        id: calculatedBordro.id || crypto.randomUUID(),
         company_id: effectiveCompanyId,
         employee_id: selectedEmployee.id,
       } as BordroItem;

@@ -6,7 +6,6 @@ import {
   CheckSquare,
   Clock,
   Cpu,
-  DollarSign,
   Download,
   Fingerprint,
   MapPin,
@@ -15,7 +14,6 @@ import {
   Radio,
   RefreshCw,
   Save,
-  Send,
   TrendingUp,
   UserCheck,
   UserX,
@@ -24,13 +22,12 @@ import {
 } from 'lucide-react';
 import type { Employee } from '../types';
 import type { IzinTalebi } from '../types/izin';
-import type { BordroItem } from '../types/bordro';
 
 type PDKSDurum = 'normal' | 'gec' | 'erken-cikis' | 'devamsiz' | 'izinli' | 'eksik-cikis';
 type OnayDurum = 'beklemede' | 'onaylandi' | 'reddedildi';
 type KaynakTip = 'parmakizi' | 'rfid' | 'mobil-gps' | 'mobil-qr' | 'beacon' | 'manuel';
 
-type Sekme = 'devam' | 'motor' | 'onay' | 'vardiya' | 'bordro';
+type Sekme = 'devam' | 'motor' | 'onay' | 'vardiya';
 
 interface VardiyaTanimi {
   id: string;
@@ -76,19 +73,7 @@ interface FazlaMesaiOnay {
   durum: OnayDurum;
 }
 
-interface BordroKopru {
-  employeeId: string;
-  employeeName: string;
-  department: string;
-  brutMaas: number;
-  calistigiGun: number;
-  devamsizGun: number;
-  izinliGun: number;
-  fazlaMesaiSaat: number;
-  fazlaMesaiTutar: number;
-  eksikGunKesinti: number;
-  tahakkukEsas: number;
-}
+
 
 const DURUM_RENK: Record<PDKSDurum, string> = {
   normal: 'bg-green-100 text-green-700',
@@ -260,13 +245,11 @@ function generateDemoKayitlar(employees: Employee[]): PDKSKaydi[] {
 interface PDKSYonetimiProps {
   employees: Employee[];
   izinTalepleri?: IzinTalebi[];
-  bordrolar?: BordroItem[];
 }
 
 const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
   employees,
   izinTalepleri = [],
-  bordrolar = [],
 }) => {
   const [aktifSekme, setAktifSekme] = useState<Sekme>('devam');
   const [secilenTarih, setSecilenTarih] = useState('2026-05-04');
@@ -275,7 +258,6 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
   const [checkInTur, setCheckInTur] = useState<KaynakTip>('mobil-qr');
   const [duzeltmeModal, setDuzeltmeModal] = useState<PDKSKaydi | null>(null);
   const [duzeltmeSaati, setDuzeltmeSaati] = useState('');
-  const [bordroTetiklendi, setBordroTetiklendi] = useState(false);
   const [vardiyaModal, setVardiyaModal] = useState(false);
   const [vardiyalar, setVardiyalar] = useState<VardiyaTanimi[]>(DEMO_VARDIYALAR);
   const [yeniVardiya, setYeniVardiya] = useState<Partial<VardiyaTanimi>>({
@@ -285,6 +267,7 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
     esnek: false,
   });
   const [allKayitlar, setAllKayitlar] = useState<PDKSKaydi[]>(() => generateDemoKayitlar(employees));
+  const [fazlaMesaiKayitlar, setFazlaMesaiKayitlar] = useState<PDKSKaydi[]>([]);
 
   const departmanlar = ['all', ...Array.from(new Set(employees.map((e) => e.department).filter(Boolean)))];
 
@@ -331,36 +314,6 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
     return Object.values(map).filter((o) => o.haftalikFazlaMesaiDk > 0);
   }, [allKayitlar, employees]);
 
-  const bordroKopruVerisi = useMemo<BordroKopru[]>(
-    () =>
-      employees.slice(0, 10).map((emp) => {
-        const list = allKayitlar.filter((k) => k.employeeId === emp.id);
-        const calistigiGun = list.filter((k) => ['normal', 'gec', 'erken-cikis'].includes(effectiveDurum(k))).length;
-        const devamsizGun = list.filter((k) => effectiveDurum(k) === 'devamsiz').length;
-        const izinliGun = list.filter((k) => effectiveDurum(k) === 'izinli').length;
-        const fazlaMesaiSaat = Math.round((list.reduce((s, k) => s + k.gunlukFazlaMesaiDk, 0) / 60) * 10) / 10;
-        const brutMaas = getLatestBrutMaas(emp.id, emp.salary);
-        const saatlik = brutMaas / 240;
-        const fazlaMesaiTutar = Math.round(fazlaMesaiSaat * saatlik * 1.5);
-        const eksikGunKesinti = Math.round(devamsizGun * (brutMaas / 30));
-        const tahakkukEsas = brutMaas + fazlaMesaiTutar - eksikGunKesinti;
-        return {
-          employeeId: emp.id,
-          employeeName: emp.name,
-          department: emp.department,
-          brutMaas,
-          calistigiGun,
-          devamsizGun,
-          izinliGun,
-          fazlaMesaiSaat,
-          fazlaMesaiTutar,
-          eksikGunKesinti,
-          tahakkukEsas,
-        };
-      }),
-    [allKayitlar, bordrolar, employees, izinTalepleri]
-  );
-
   const bekleyenOnaySayisi = onayKuyrugu.filter((o) => o.durum === 'beklemede').length;
 
   function kaynakEtiketi(tip: KaynakTip): string {
@@ -393,13 +346,6 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
     return hasApprovedLeave(k.employeeId, k.tarih) ? 'izinli' : 'devamsiz';
   }
 
-  function getLatestBrutMaas(employeeId: string, fallbackSalary: number): number {
-    const empBordrolari = bordrolar
-      .filter((b) => b.employee_id === employeeId)
-      .sort((a, b) => b.period.localeCompare(a.period));
-    return empBordrolari[0]?.brut_maas ?? fallbackSalary;
-  }
-
   function fazlaMesaiOnayla(employeeId: string, durum: OnayDurum) {
     setAllKayitlar((prev) => prev.map((k) => (k.employeeId === employeeId ? { ...k, fazlaMesaiOnayDurum: durum } : k)));
   }
@@ -428,7 +374,7 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h2 className="text-xl font-bold text-gray-800">Akilli PDKS ve Mesai Yonetimi</h2>
-          <p className="text-sm text-gray-500 mt-0.5">Hesaplama motoru, onay hiyerarsisi ve bordro koprusu</p>
+          <p className="text-sm text-gray-500 mt-0.5">Hesaplama motoru, vardiya yonetimi ve onay hiyerarsisi</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -469,9 +415,8 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
         {[
           { id: 'devam' as Sekme, label: 'Devam Takibi' },
           { id: 'motor' as Sekme, label: 'Hesaplama Motoru' },
-          { id: 'onay' as Sekme, label: `Onay Kuyrugu${bekleyenOnaySayisi ? ` (${bekleyenOnaySayisi})` : ''}` },
+          { id: 'onay' as Sekme, label: `Fazla Mesai Onay${bekleyenOnaySayisi ? ` (${bekleyenOnaySayisi})` : ''}` },
           { id: 'vardiya' as Sekme, label: 'Vardiya Yonetimi' },
-          { id: 'bordro' as Sekme, label: 'Bordro Koprusu' },
         ].map((sekme) => (
           <button
             key={sekme.id}
@@ -559,12 +504,36 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
                           {DURUM_ETIKETI[effectiveDurum(k)]}
                         </span>
                       </td>
-                      <td className="px-4 py-3">
-                        {effectiveDurum(k) === 'eksik-cikis' && (
-                          <button onClick={() => setDuzeltmeModal(k)} className="text-xs text-pink-600 hover:underline font-medium">
-                            Duzelt
-                          </button>
-                        )}
+      <td className="px-4 py-3">
+                        <div className="flex flex-col gap-1">
+                          {effectiveDurum(k) === 'eksik-cikis' && (
+                            <button onClick={() => setDuzeltmeModal(k)} className="text-xs text-pink-600 hover:underline font-medium">
+                              Duzelt
+                            </button>
+                          )}
+                          {k.gunlukFazlaMesaiDk > 0 && k.fazlaMesaiOnayDurum === 'beklemede' && (
+                            <div className="flex gap-1">
+                              <button
+                                onClick={() => fazlaMesaiOnayla(k.employeeId, 'onaylandi')}
+                                className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium hover:bg-green-200"
+                              >
+                                FM ✓
+                              </button>
+                              <button
+                                onClick={() => fazlaMesaiOnayla(k.employeeId, 'reddedildi')}
+                                className="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded font-medium hover:bg-red-200"
+                              >
+                                FM ✗
+                              </button>
+                            </div>
+                          )}
+                          {k.gunlukFazlaMesaiDk > 0 && k.fazlaMesaiOnayDurum === 'onaylandi' && (
+                            <span className="text-[10px] text-green-600 font-medium">FM ✓ Onaylandi</span>
+                          )}
+                          {k.gunlukFazlaMesaiDk > 0 && k.fazlaMesaiOnayDurum === 'reddedildi' && (
+                            <span className="text-[10px] text-red-500 font-medium">FM Reddedildi</span>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -591,10 +560,10 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
               { title: '2) Vardiya Eslesme', text: 'Calisan + tarih -> aktif vardiya', icon: <Clock className="w-4 h-4" />, color: 'bg-blue-50 border-blue-200' },
               { title: '3) Tolerans', text: '<= 15 dk gecikme toleransli', icon: <CheckSquare className="w-4 h-4" />, color: 'bg-green-50 border-green-200' },
               { title: '4) Mola Dusumu', text: '>= 4 saatte otomatik 60 dk mola', icon: <RefreshCw className="w-4 h-4" />, color: 'bg-orange-50 border-orange-200' },
-              { title: '5) Fazla Mesai', text: 'Haftalik 45 saat ustu bordroya %50 zamli', icon: <TrendingUp className="w-4 h-4" />, color: 'bg-purple-50 border-purple-200' },
+              { title: '5) Fazla Mesai', text: 'Haftalik 45 saat ustu %50 zamli, onay kuyruğuna alınır', icon: <TrendingUp className="w-4 h-4" />, color: 'bg-purple-50 border-purple-200' },
               { title: '6) Eksik Kayit', text: 'Giris var, cikis yok -> duzeltme talebi', icon: <AlertTriangle className="w-4 h-4" />, color: 'bg-pink-50 border-pink-200' },
               { title: '7) Devamsizlik', text: 'PDKS yok + izin yok -> devamsiz', icon: <UserX className="w-4 h-4" />, color: 'bg-red-50 border-red-200' },
-              { title: '8) Bordro Koprusu', text: 'Brut + FM - Eksik Gun = Tahakkuk', icon: <DollarSign className="w-4 h-4" />, color: 'bg-yellow-50 border-yellow-200' },
+              { title: '8) Onay Hiyerarsisi', text: 'Satir ici onay veya kuyruk ekraniyla yoneticiye sunar', icon: <CheckSquare className="w-4 h-4" />, color: 'bg-yellow-50 border-yellow-200' },
             ].map((rule) => (
               <div key={rule.title} className={`rounded-2xl border p-4 ${rule.color}`}>
                 <div className="flex items-center gap-2 mb-1 text-gray-700">
@@ -609,7 +578,7 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
           <div className="bg-white rounded-2xl border border-gray-200 p-5">
             <p className="text-sm font-semibold text-gray-700 mb-2">Ornek Akis (08:05 → 18:15)</p>
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              {['Ham Giris 08:05', 'Tolerans gecti', 'Brut 10s10dk', 'Mola -60dk', 'Net 9s10dk', 'FM +10dk', 'Bordro FM-10dk'].map((step) => (
+              {['Ham Giris 08:05', 'Tolerans gecti', 'Brut 10s10dk', 'Mola -60dk', 'Net 9s10dk', 'FM +10dk', 'Onay Bekliyor'].map((step) => (
                 <span key={step} className="px-2.5 py-1 rounded-lg bg-gray-100 text-gray-700">
                   {step}
                 </span>
@@ -622,7 +591,7 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
       {aktifSekme === 'onay' && (
         <div className="space-y-4">
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm text-amber-800">
-            Yonetici onayi olmayan fazla mesailer bordroya yansitilmaz.
+            Yonetici onayi olmayan fazla mesailer kesinlesmez. Onaylanan kayitlar PDKS raporuna islenir.
           </div>
           {onayKuyrugu.length === 0 ? (
             <div className="bg-white rounded-2xl border border-dashed border-gray-300 p-8 text-center text-gray-400 text-sm">
@@ -720,61 +689,6 @@ const PDKSYonetimi: React.FC<PDKSYonetimiProps> = ({
                 </div>
               );
             })}
-          </div>
-        </div>
-      )}
-
-      {aktifSekme === 'bordro' && (
-        <div className="space-y-4">
-          <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-start justify-between flex-wrap gap-3">
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Bordro Konsolidasyonu</p>
-              <p className="text-xs text-gray-500 mt-0.5">Brut Maas + Fazla Mesai - Eksik Gun = Tahakkuk Esas Ucret</p>
-            </div>
-            <button
-              onClick={() => setBordroTetiklendi(true)}
-              disabled={bordroTetiklendi}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium ${
-                bordroTetiklendi ? 'bg-green-100 text-green-700' : 'bg-indigo-600 text-white hover:bg-indigo-700'
-              }`}
-            >
-              <Send className="w-4 h-4" />
-              {bordroTetiklendi ? 'Bordro Tetiklendi' : 'Bordroya Gonder'}
-            </button>
-          </div>
-
-          <div className="bg-gray-900 text-gray-100 rounded-2xl p-4 font-mono text-sm">
-            TahakkukEsas = BrutMaas + (FazlaMesai x 1.5) - (EksikGun x Maas/30)
-          </div>
-
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50 border-b border-gray-100">
-                  <tr>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500">Personel</th>
-                    <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500">Brut</th>
-                    <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500">+ FM</th>
-                    <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500">- Eksik</th>
-                    <th className="text-right px-4 py-3 text-xs font-semibold text-indigo-700">Tahakkuk</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {bordroKopruVerisi.map((b) => (
-                    <tr key={b.employeeId}>
-                      <td className="px-4 py-3">
-                        <p className="font-medium text-gray-800">{b.employeeName}</p>
-                        <p className="text-[10px] text-gray-400">{b.department}</p>
-                      </td>
-                      <td className="px-4 py-3 text-right text-xs">{b.brutMaas.toLocaleString('tr-TR')} TL</td>
-                      <td className="px-4 py-3 text-right text-xs text-green-600">+{b.fazlaMesaiTutar.toLocaleString('tr-TR')} TL</td>
-                      <td className="px-4 py-3 text-right text-xs text-red-500">-{b.eksikGunKesinti.toLocaleString('tr-TR')} TL</td>
-                      <td className="px-4 py-3 text-right text-xs font-bold text-indigo-700">{b.tahakkukEsas.toLocaleString('tr-TR')} TL</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
       )}

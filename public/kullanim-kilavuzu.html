@@ -65,34 +65,54 @@
 <nav>
   <div class="logo">
     <h2>İK Yönetim Sistemi</h2>
-    <p>Kullanım Kılavuzu v1.0</p>
+    <p>Kullanım Kılavuzu v2.0</p>
   </div>
   <div class="section-title">Genel</div>
   <a href="#giris">Giriş</a>
   <a href="#roller">Roller ve Yetkiler</a>
-  <div class="section-title">Modüller</div>
+  <div class="section-title">Temel Modüller</div>
   <a href="#giris-ekrani">1. Giriş Ekranı</a>
   <a href="#personel">2. Personel Yönetimi</a>
   <a href="#ozluk">3. Özlük Dosyası</a>
   <a href="#gorev">4. Görev Tanımı</a>
-  <a href="#bordro">5. Bordro</a>
-  <a href="#izin">6. İzin Yönetimi</a>
-  <a href="#kullanicilar">7. Kullanıcılar</a>
-  <a href="#sistem">8. Sistem Ayarları</a>
-  <a href="#takvim">9. Takvim</a>
-  <a href="#arama">10. Arama</a>
+  <a href="#gorev-kayitlari">5. Görev Tanımı Kayıtları</a>
+  <a href="#bordro">6. Bordro</a>
+  <a href="#bordro-onay">7. Bordro Onay İşlemleri</a>
+  <a href="#izin">8. İzin Yönetimi</a>
+  <a href="#raporlar">9. İzin Raporları</a>
+  <a href="#izin-tanimlari">10. İzin Türleri Tanımları</a>
+  <a href="#izin-cakisma">11. İzin Çakışma Kontrolü</a>
+  <div class="section-title">İleri Modüller</div>
+  <a href="#pdks">12. PDKS & Devam Kontrol</a>
+  <a href="#performans">13. Performans & Geri Bildirim</a>
+  <a href="#ise-alim">14. İşe Alım & ATS</a>
+  <a href="#onboarding">15. Onboarding Akışı</a>
+  <a href="#egitim">16. Eğitim & Gelişim (LMS)</a>
+  <a href="#analitik">17. Veri Analitiği</a>
+  <a href="#yetkinlik">18. Yetkinlik Matrisi</a>
+  <a href="#okr">19. OKR & Hedefler</a>
+  <a href="#yan-haklar">20. Esnek Yan Haklar</a>
+  <a href="#zimmet">21. Zimmet Yönetimi</a>
+  <a href="#org-sema">22. Organizasyon Şeması</a>
+  <a href="#form-builder">23. Dinamik Form Builder</a>
+  <a href="#kvkk">24. KVKK / GDPR Uyumluluk</a>
+  <div class="section-title">Sistem</div>
+  <a href="#kullanicilar">25. Kullanıcılar</a>
+  <a href="#sistem">26. Sistem Ayarları</a>
+  <a href="#takvim">27. Takvim & Uyarılar</a>
+  <a href="#arama">28. Arama</a>
 </nav>
 
 <!-- ── İÇERİK ── -->
 <main>
 
   <h1>İK Yönetim Sistemi</h1>
-  <p style="color:#64748b; margin-bottom:28px;">Kullanım Kılavuzu — Tüm ekranlar, alanlar ve tablolar</p>
+  <p style="color:#64748b; margin-bottom:28px;">Kullanım Kılavuzu — Versiyon 2.0 — Tüm ekranlar, alanlar ve tablolar</p>
 
   <!-- GİRİŞ -->
   <section id="giris">
     <h2>Giriş</h2>
-    <p>Bu kılavuz; personel yönetimi, bordro, izin takibi, görev tanımları ve özlük dosyaları modüllerini içeren İK Yönetim Sistemi'nin tüm ekranlarını, form alanlarını ve tablo sütunlarını açıklamaktadır.</p>
+    <p>Bu kılavuz; personel yönetimi, bordro, izin takibi, görev tanımları, özlük dosyaları, performans, işe alım, eğitim, OKR, yetkinlik, onboarding, zimmet, organizasyon şeması, analitik, KVKK, yan haklar ve daha birçok modülü içeren İK Yönetim Sistemi'nin tüm ekranlarını, form alanlarını ve tablo sütunlarını açıklamaktadır.</p>
     <div class="alert alert-blue">
       <strong>Önemli:</strong> Sisteme erişim için geçerli bir e-posta ve şifre gereklidir. Veriler şirkete özeldir; her kullanıcı yalnızca kendi şirketinin verilerini görebilir.
     </div>
@@ -504,9 +524,40 @@
     </div>
   </section>
 
-  <!-- 5. BORDRO -->
+  <!-- 5. GÖREV TANIMI KAYITLARI -->
+  <section id="gorev-kayitlari">
+    <h2>5. Görev Tanımı Kayıtları</h2>
+    <p>Daha önce kaydedilmiş tüm görev tanımlarının listelendiği ve yönetildiği kayıt ekranıdır.</p>
+    <div class="card">
+      <div class="card-title">Kayıt Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Görev Adı</td><td>Metin</td></tr>
+          <tr><td>İş Birimi</td><td>Metin</td></tr>
+          <tr><td>Bağlı Pozisyon</td><td>Metin</td></tr>
+          <tr><td>Onay Durumu</td><td>Rozet (Beklemede / Onaylandı / Reddedildi)</td></tr>
+          <tr><td>Kayıt Tarihi</td><td>Tarih/Saat</td></tr>
+          <tr><td>İşlemler</td><td>Görüntüle / Sil</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Filtreler ve Arama</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Personel / Görev Adı Ara</td><td>text</td></tr>
+          <tr><td>Onay Durumu</td><td>select (Tümü / Beklemede / Onaylandı / Reddedildi)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6. BORDRO -->
   <section id="bordro">
-    <h2>5. Bordro</h2>
+    <h2>6. Bordro</h2>
     <p>Personel maaş hesaplamalarının yapıldığı, kaydedildiği ve onaylandığı modüldür.</p>
 
     <div class="card">
@@ -617,9 +668,43 @@
     </div>
   </section>
 
-  <!-- 6. İZİN YÖNETİMİ -->
+  <!-- 7. BORDRO ONAY İŞLEMLERİ -->
+  <section id="bordro-onay">
+    <h2>7. Bordro Onay İşlemleri</h2>
+    <p>Kaydedilmiş bordroların personel tarafından onaylanma sürecinin takip edildiği ekrandır.</p>
+    <div class="card">
+      <div class="card-title">Onay Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Dönem</td><td>Metin (YYYY-MM)</td></tr>
+          <tr><td>Net Maaş</td><td>Para (₺)</td></tr>
+          <tr><td>Onay Durumu</td><td>Rozet (Beklemede / Onaylandı)</td></tr>
+          <tr><td>Onay Tarihi</td><td>Tarih/Saat</td></tr>
+          <tr><td>İşlemler</td><td>Görüntüle / Onay Yönetimi</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Onay Doğrulama Yöntemleri</div>
+      <table>
+        <thead><tr><th>Yöntem</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Dijital İmza</td><td>Personel ekranda çizerek imzalar; imza veri kaydedilir</td></tr>
+          <tr><td>Kimlik Belgesi</td><td>Personel kimlik belgesi fotoğrafı yükler</td></tr>
+          <tr><td>Onay Şifresi</td><td>Yönetici tarafından atanan özel şifre ile doğrulama</td></tr>
+        </tbody>
+      </table>
+      <div class="alert alert-amber">
+        <strong>Not:</strong> Bordro veritabanına kaydedilememiş (bağlantı hatası) durumlarda onay yerel olarak tamamlanır; veritabanına yazılmaz.
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. İZİN YÖNETİMİ -->
   <section id="izin">
-    <h2>6. İzin Yönetimi</h2>
+    <h2>8. İzin Yönetimi</h2>
     <p>İzin taleplerinin oluşturulduğu, onaylandığı ve raporlandığı modüldür.</p>
 
     <div class="card">
@@ -705,9 +790,14 @@
         </tbody>
       </table>
     </div>
+  </section>
 
+  <!-- 9. İZİN RAPORLARI -->
+  <section id="raporlar">
+    <h2>9. İzin Raporları</h2>
+    <p>İzin verilerinin departman ve personel bazında analiz edildiği rapor modülüdür.</p>
     <div class="card">
-      <div class="card-title">İzin Raporları — Filtreler</div>
+      <div class="card-title">Filtreler</div>
       <table>
         <thead><tr><th>Label</th><th>Alan Türü</th><th>Seçenekler</th></tr></thead>
         <tbody>
@@ -717,7 +807,6 @@
           <tr><td>CSV İndir</td><td>button</td><td>Mevcut raporu CSV olarak dışa aktarır</td></tr>
         </tbody>
       </table>
-
       <h4>Rapor Türü: Özet — İstatistik Kartları</h4>
       <div class="field-list">
         <div class="field-item"><div class="field-label">Toplam Personel</div></div>
@@ -726,19 +815,6 @@
         <div class="field-item"><div class="field-label">Onaylanan Talep</div></div>
         <div class="field-item"><div class="field-label">Reddedilen Talep</div></div>
       </div>
-
-      <h4>Departman Bazında Özet — Tablo Sütunları</h4>
-      <table>
-        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
-        <tbody>
-          <tr><td>Departman</td><td>Metin</td></tr>
-          <tr><td>Personel Sayısı</td><td>Sayı</td></tr>
-          <tr><td>Toplam Talep</td><td>Sayı</td></tr>
-          <tr><td>Onaylanan Gün</td><td>Sayı</td></tr>
-          <tr><td>Ortalama Gün</td><td>Sayı</td></tr>
-        </tbody>
-      </table>
-
       <h4>Rapor Türü: Haklar — Tablo Sütunları</h4>
       <table>
         <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
@@ -755,9 +831,447 @@
     </div>
   </section>
 
-  <!-- 7. KULLANICILAR -->
+  <!-- 10. İZİN TÜRLERİ TANIMLARI -->
+  <section id="izin-tanimlari">
+    <h2>10. İzin Türleri Tanımları</h2>
+    <p>Şirkete özel izin türlerinin tanımlandığı ve yapılandırıldığı modüldür.</p>
+    <div class="card">
+      <div class="card-title">İzin Türü Tanımı Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>İzin Türü Adı</td><td>text</td><td>Yıllık İzin, Mazeret İzni vb.</td></tr>
+          <tr><td>Maksimum Süre (Gün)</td><td>number</td><td>Bu izin türü için izin verilebilecek maksimum gün</td></tr>
+          <tr><td>Yıllık Haklardan Düşülsün mü?</td><td>checkbox</td><td>Yıllık izin bakiyesini etkiler mi</td></tr>
+          <tr><td>Ücretli mi?</td><td>select (Ücretli / Ücretsiz)</td><td>İzin döneminde maaş ödenip ödenmeyeceği</td></tr>
+          <tr><td>Açıklama</td><td>textarea</td><td>Ek notlar</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 11. İZİN ÇAKIŞMA KONTROLÜ -->
+  <section id="izin-cakisma">
+    <h2>11. İzin Çakışma Kontrolü</h2>
+    <p>Aynı departmanda eş zamanlı izinlerin çakışmasını görselleştiren ve uyaran modüldür.</p>
+    <div class="card">
+      <div class="card-title">Filtreler</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Departman</td><td>select</td></tr>
+          <tr><td>Tarih Aralığı</td><td>date range</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Çakışma Tablosu Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Departman</td><td>Metin</td></tr>
+          <tr><td>İzin Tarihleri</td><td>Tarih aralığı</td></tr>
+          <tr><td>Çakışma Uyarısı</td><td>Rozet / İkon</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 12. PDKS -->
+  <section id="pdks">
+    <h2>12. PDKS &amp; Devam Kontrol</h2>
+    <p>Personelin işe giriş/çıkış saatlerinin takip edildiği ve devam durumlarının yönetildiği modüldür.</p>
+    <div class="card">
+      <div class="card-title">Devam Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Tarih</td><td>Tarih</td></tr>
+          <tr><td>Giriş Saati</td><td>Saat</td></tr>
+          <tr><td>Çıkış Saati</td><td>Saat</td></tr>
+          <tr><td>Toplam Saat</td><td>Sayı (saat)</td></tr>
+          <tr><td>Durum</td><td>Rozet (Normal / Geç / Erken Çıkış / Devamsız)</td></tr>
+          <tr><td>İzin mi?</td><td>Evet/Hayır</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Filtreler</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>select / arama</td></tr>
+          <tr><td>Departman</td><td>select</td></tr>
+          <tr><td>Tarih Aralığı</td><td>date range</td></tr>
+          <tr><td>Durum</td><td>select</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 13. PERFORMANS -->
+  <section id="performans">
+    <h2>13. Performans &amp; Geri Bildirim</h2>
+    <p>Çalışan performans değerlendirmelerinin yapıldığı ve geri bildirimlerin yönetildiği modüldür.</p>
+    <div class="card">
+      <div class="card-title">Performans Değerlendirme Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>select</td></tr>
+          <tr><td>Dönem</td><td>select (Yıllık / Yarıyıllık / Çeyrek)</td></tr>
+          <tr><td>Değerlendirme Puanı</td><td>number (1-5) / yıldız</td></tr>
+          <tr><td>Güçlü Yönler</td><td>textarea</td></tr>
+          <tr><td>Gelişim Alanları</td><td>textarea</td></tr>
+          <tr><td>Hedefler</td><td>textarea</td></tr>
+          <tr><td>Genel Yorum</td><td>textarea</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Geri Bildirim Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Dönem</td><td>Metin</td></tr>
+          <tr><td>Puan</td><td>Sayı / Yıldız</td></tr>
+          <tr><td>Değerlendiren</td><td>Metin</td></tr>
+          <tr><td>Tarih</td><td>Tarih</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 14. İŞE ALIM ATS -->
+  <section id="ise-alim">
+    <h2>14. İşe Alım &amp; ATS</h2>
+    <p>Açık pozisyonların yönetildiği ve aday takibinin yapıldığı Başvuru Takip Sistemi (ATS) modülüdür.</p>
+    <div class="card">
+      <div class="card-title">Pozisyon Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Pozisyon Adı</td><td>Metin</td></tr>
+          <tr><td>Departman</td><td>Metin</td></tr>
+          <tr><td>Aday Sayısı</td><td>Sayı</td></tr>
+          <tr><td>Durum</td><td>Rozet (Açık / Kapalı / Dondurulmuş)</td></tr>
+          <tr><td>Açılış Tarihi</td><td>Tarih</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Aday Kanban — Aşamalar</div>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Başvuru Alındı</div></div>
+        <div class="field-item"><div class="field-label">İnceleme</div></div>
+        <div class="field-item"><div class="field-label">Mülakat</div></div>
+        <div class="field-item"><div class="field-label">Teklif</div></div>
+        <div class="field-item"><div class="field-label">İşe Alındı</div></div>
+        <div class="field-item"><div class="field-label">Reddedildi</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. ONBOARDING -->
+  <section id="onboarding">
+    <h2>15. Onboarding Akışı</h2>
+    <p>Yeni işe başlayan çalışanların oryantasyon süreçlerinin yönetildiği modüldür.</p>
+    <div class="card">
+      <div class="card-title">Onboarding Adımları</div>
+      <table>
+        <thead><tr><th>Adım</th><th>Açıklama</th><th>Durum</th></tr></thead>
+        <tbody>
+          <tr><td>Belge Toplama</td><td>Özlük belgeleri ve sözleşme imzaları</td><td>Rozet (Beklemede / Tamamlandı)</td></tr>
+          <tr><td>Ekipman Teslimi</td><td>Bilgisayar, kart vb. zimmet</td><td>Rozet</td></tr>
+          <tr><td>Sisteme Erişim</td><td>E-posta, hesap açılışları</td><td>Rozet</td></tr>
+          <tr><td>Oryantasyon Eğitimi</td><td>Şirket tanıtım ve temel eğitimler</td><td>Rozet</td></tr>
+          <tr><td>Mentor Atama</td><td>Rehber personel eşleşmesi</td><td>Rozet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 16. EĞİTİM LMS -->
+  <section id="egitim">
+    <h2>16. Eğitim &amp; Gelişim (LMS)</h2>
+    <p>Çalışan eğitimlerinin planlandığı ve takip edildiği Öğrenme Yönetim Sistemi modülüdür.</p>
+    <div class="card">
+      <div class="card-title">Eğitim Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Eğitim Adı</td><td>Metin</td></tr>
+          <tr><td>Kategori</td><td>Metin (Teknik / Yönetsel / Uyum vb.)</td></tr>
+          <tr><td>Süre</td><td>Saat / Gün</td></tr>
+          <tr><td>Eğitmen / Platform</td><td>Metin</td></tr>
+          <tr><td>Atanan Personel</td><td>Sayı</td></tr>
+          <tr><td>Tamamlanma %</td><td>İlerleme çubuğu</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Personel Eğitim Durumu — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Metin</td></tr>
+          <tr><td>Eğitim</td><td>Metin</td></tr>
+          <tr><td>Başlangıç</td><td>Tarih</td></tr>
+          <tr><td>Tamamlanma</td><td>Tarih</td></tr>
+          <tr><td>Durum</td><td>Rozet (Beklemede / Devam Ediyor / Tamamlandı)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 17. ANALİTİK -->
+  <section id="analitik">
+    <h2>17. Veri Analitiği</h2>
+    <p>İK verilerini görselleştiren özet dashboard modülüdür.</p>
+    <div class="card">
+      <div class="card-title">Dashboard Kartları</div>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Toplam Personel</div></div>
+        <div class="field-item"><div class="field-label">Aktif Personel</div></div>
+        <div class="field-item"><div class="field-label">Bu Ay Bordro Toplamı</div></div>
+        <div class="field-item"><div class="field-label">Bekleyen İzin Talepleri</div></div>
+        <div class="field-item"><div class="field-label">Ortalama Net Maaş</div></div>
+        <div class="field-item"><div class="field-label">İşten Çıkış Oranı</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Grafik Türleri</div>
+      <table>
+        <thead><tr><th>Grafik</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Departman Dağılımı</td><td>Pasta grafik — departmanlara göre personel sayısı</td></tr>
+          <tr><td>Aylık Bordro Trendi</td><td>Çizgi grafik — aylık brüt/net toplam</td></tr>
+          <tr><td>İzin Kullanım Oranları</td><td>Çubuk grafik — departman bazında</td></tr>
+          <tr><td>Yeni İşe Alım / Çıkış</td><td>Aylık giriş-çıkış trendi</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 18. YETKİNLİK MATRİSİ -->
+  <section id="yetkinlik">
+    <h2>18. Yetkinlik Matrisi</h2>
+    <p>Personelin yetkinliklerinin düzeylere göre eşleştirildiği matris görünümüdür.</p>
+    <div class="card">
+      <div class="card-title">Matris Alanları</div>
+      <table>
+        <thead><tr><th>Alan</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>Satır başlıkları</td></tr>
+          <tr><td>Yetkinlik</td><td>Sütun başlıkları</td></tr>
+          <tr><td>Düzey</td><td>1-5 / Başlangıç-Uzman (hücre değeri)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Yetkinlik Ekleme Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>select</td></tr>
+          <tr><td>Yetkinlik</td><td>text / select</td></tr>
+          <tr><td>Düzey</td><td>number (1-5) veya select</td></tr>
+          <tr><td>Not</td><td>textarea</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 19. OKR -->
+  <section id="okr">
+    <h2>19. OKR &amp; Hedefler</h2>
+    <p>Şirket ve bireysel hedeflerin (Objective &amp; Key Results) takip edildiği modüldür.</p>
+    <div class="card">
+      <div class="card-title">Hedef Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Hedef (Objective)</td><td>Metin</td></tr>
+          <tr><td>Anahtar Sonuç (Key Result)</td><td>Metin</td></tr>
+          <tr><td>Sahip</td><td>Personel / Departman</td></tr>
+          <tr><td>Dönem</td><td>Metin (Q1/Q2/Q3/Q4 veya Yıl)</td></tr>
+          <tr><td>İlerleme %</td><td>İlerleme çubuğu</td></tr>
+          <tr><td>Durum</td><td>Rozet (Devam Ediyor / Tamamlandı / Risk)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Hedef Ekleme Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Hedef Başlığı</td><td>text</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Anahtar Sonuçlar</td><td>textarea / liste</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Sahip (Personel / Departman)</td><td>select</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Dönem</td><td>select</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Başlangıç / Bitiş Tarihi</td><td>date</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 20. ESNEK YAN HAKLAR -->
+  <section id="yan-haklar">
+    <h2>20. Esnek Yan Haklar</h2>
+    <p>Personele sunulan esnek yan hak paketlerinin tanımlandığı ve takip edildiği modüldür.</p>
+    <div class="card">
+      <div class="card-title">Yan Hak Paketi Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Paket Adı</td><td>Metin</td></tr>
+          <tr><td>Kategori</td><td>Sağlık / Ulaşım / Yemek / Spor / Eğitim vb.</td></tr>
+          <tr><td>Değer / Limit (₺)</td><td>Para</td></tr>
+          <tr><td>Atanan Personel Sayısı</td><td>Sayı</td></tr>
+          <tr><td>Durum</td><td>Aktif / Pasif</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Personele Atama Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th></tr></thead>
+        <tbody>
+          <tr><td>Personel</td><td>select (çoklu seçim)</td></tr>
+          <tr><td>Yan Hak Paketi</td><td>select</td></tr>
+          <tr><td>Başlangıç Tarihi</td><td>date</td></tr>
+          <tr><td>Bitiş Tarihi</td><td>date</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 21. ZİMMET YÖNETİMİ -->
+  <section id="zimmet">
+    <h2>21. Zimmet Yönetimi</h2>
+    <p>Personele teslim edilen şirket ekipmanlarının takip edildiği modüldür.</p>
+    <div class="card">
+      <div class="card-title">Zimmet Listesi — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Ekipman Adı</td><td>Metin</td></tr>
+          <tr><td>Kategori</td><td>Bilgisayar / Telefon / Araç / Diğer</td></tr>
+          <tr><td>Seri No / Barkod</td><td>Metin</td></tr>
+          <tr><td>Atanan Personel</td><td>Metin</td></tr>
+          <tr><td>Teslim Tarihi</td><td>Tarih</td></tr>
+          <tr><td>İade Tarihi</td><td>Tarih / Boş (henüz iade edilmedi)</td></tr>
+          <tr><td>Durum</td><td>Rozet (Zimmetli / İade Edildi / Kayıp)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Yeni Zimmet Formu</div>
+      <table>
+        <thead><tr><th>Label</th><th>Alan Türü</th><th>Zorunlu</th></tr></thead>
+        <tbody>
+          <tr><td>Ekipman Adı</td><td>text</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Kategori</td><td>select</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Seri No</td><td>text</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+          <tr><td>Atanan Personel</td><td>select</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Teslim Tarihi</td><td>date</td><td><span class="badge badge-red">Evet</span></td></tr>
+          <tr><td>Notlar</td><td>textarea</td><td><span class="badge badge-gray">Hayır</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 22. ORGANİZASYON ŞEMASI -->
+  <section id="org-sema">
+    <h2>22. Organizasyon Şeması</h2>
+    <p>Şirketin hiyerarşik yapısını görselleştiren ağaç diyagramı modülüdür.</p>
+    <div class="card">
+      <div class="card-title">Şema Özellikleri</div>
+      <table>
+        <thead><tr><th>Özellik</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Ağaç Görünümü</td><td>Departman ve pozisyon bazında hiyerarşik ağaç</td></tr>
+          <tr><td>Kart Bilgileri</td><td>Ad, pozisyon, departman, fotoğraf</td></tr>
+          <tr><td>Filtreler</td><td>Departman bazında filtreleme</td></tr>
+          <tr><td>Yakınlaştırma</td><td>Zoom in/out, sürükleme</td></tr>
+          <tr><td>PNG/PDF Dışa Aktarma</td><td>Şemayı görsel olarak dışa aktarır</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 23. DİNAMİK FORM BUILDER -->
+  <section id="form-builder">
+    <h2>23. Dinamik Form Builder</h2>
+    <p>Özel formların sürükle-bırak arayüzü ile oluşturulduğu modüldür.</p>
+    <div class="card">
+      <div class="card-title">Desteklenen Alan Türleri</div>
+      <div class="field-list">
+        <div class="field-item"><div class="field-label">Metin (text)</div></div>
+        <div class="field-item"><div class="field-label">Uzun Metin (textarea)</div></div>
+        <div class="field-item"><div class="field-label">Sayı (number)</div></div>
+        <div class="field-item"><div class="field-label">Tarih (date)</div></div>
+        <div class="field-item"><div class="field-label">Seçim Listesi (select)</div></div>
+        <div class="field-item"><div class="field-label">Onay Kutusu (checkbox)</div></div>
+        <div class="field-item"><div class="field-label">Radyo Butonu (radio)</div></div>
+        <div class="field-item"><div class="field-label">Dosya Yükleme (file)</div></div>
+        <div class="field-item"><div class="field-label">Başlık / Bölüm Ayırıcı</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Form Yönetimi</div>
+      <table>
+        <thead><tr><th>İşlem</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr><td>Form Oluştur</td><td>Sürükle-bırak ile alan ekle, sırayla düzenle</td></tr>
+          <tr><td>Önizleme</td><td>Oluşturulan formu kullanıcı gözünden göster</td></tr>
+          <tr><td>Kaydet</td><td>Formu şablona kaydeder</td></tr>
+          <tr><td>Yayınla</td><td>Formu personele açar</td></tr>
+          <tr><td>Yanıtları Görüntüle</td><td>Dolan formların yanıtlarını listeler</td></tr>
+          <tr><td>CSV İndir</td><td>Yanıtları tablo olarak dışa aktarır</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 24. KVKK -->
+  <section id="kvkk">
+    <h2>24. KVKK / GDPR Uyumluluk</h2>
+    <p>Kişisel verilerin korunması mevzuatına uyum faaliyetlerinin yönetildiği modüldür.</p>
+    <div class="card">
+      <div class="card-title">Veri Envanteri</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Veri Kategorisi</td><td>Kişisel / Özel Nitelikli / Finansal vb.</td></tr>
+          <tr><td>İşleme Amacı</td><td>Metin</td></tr>
+          <tr><td>Saklama Süresi</td><td>Metin</td></tr>
+          <tr><td>Hukuki Dayanak</td><td>Metin</td></tr>
+          <tr><td>Aktarım Yapılan Taraflar</td><td>Metin</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">İlgili Kişi Başvuruları — Tablo Sütunları</div>
+      <table>
+        <thead><tr><th>Sütun</th><th>Tür</th></tr></thead>
+        <tbody>
+          <tr><td>Başvuru Sahibi</td><td>Metin</td></tr>
+          <tr><td>Talep Türü</td><td>Bilgi Alma / Silme / Düzeltme / İtiraz</td></tr>
+          <tr><td>Başvuru Tarihi</td><td>Tarih</td></tr>
+          <tr><td>Son Yanıt Tarihi</td><td>Tarih (30 gün kuralı)</td></tr>
+          <tr><td>Durum</td><td>Rozet (Beklemede / Yanıtlandı / Süre Aşımı)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 25. KULLANICILAR -->
   <section id="kullanicilar">
-    <h2>7. Kullanıcı Yönetimi</h2>
+    <h2>25. Kullanıcı Yönetimi</h2>
     <p>Sisteme erişim yetkisi olan kullanıcıların yönetildiği modüldür.</p>
 
     <div class="card">
@@ -810,7 +1324,7 @@
 
   <!-- 8. SİSTEM AYARLARI -->
   <section id="sistem">
-    <h2>8. Sistem Ayarları</h2>
+    <h2>26. Sistem Ayarları</h2>
     <p>Şirket bilgilerinin ve sistem geneli parametrelerin yönetildiği modüldür.</p>
 
     <div class="card">
@@ -847,9 +1361,9 @@
     </div>
   </section>
 
-  <!-- 9. TAKVİM -->
+  <!-- 27. TAKVİM & UYARILAR -->
   <section id="takvim">
-    <h2>9. Takvim</h2>
+    <h2>27. Takvim &amp; Uyarılar</h2>
     <p>Resmi tatiller, özel günler ve firma özel takvim etkinliklerinin yönetildiği modüldür.</p>
 
     <div class="card">
@@ -883,9 +1397,9 @@
     </div>
   </section>
 
-  <!-- 10. ARAMA -->
+  <!-- 28. ARAMA -->
   <section id="arama">
-    <h2>10. Arama</h2>
+    <h2>28. Arama</h2>
     <p>Sistem genelinde personel, bordro ve izin kayıtlarında arama yapılabilen modüldür.</p>
 
     <div class="card">
@@ -906,7 +1420,7 @@
   </section>
 
   <div style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 12px;">
-    İK Yönetim Sistemi — Kullanım Kılavuzu &nbsp;|&nbsp; Versiyon 1.0 &nbsp;|&nbsp; 2026
+    İK Yönetim Sistemi — Kullanım Kılavuzu &nbsp;|&nbsp; Versiyon 2.0 &nbsp;|&nbsp; 2026
   </div>
 
 </main>
@@ -930,8 +1444,26 @@
     'personel': 'personel',
     'ozluk': 'ozluk-dosyasi',
     'gorev': 'gorev-tanimi',
+    'gorev-kayitlari': 'gorev-tanimi-kayitlari',
     'bordro': 'bordro',
+    'bordro-onay': 'bordro-onay',
     'izin': 'izin',
+    'raporlar': 'raporlar',
+    'izin-tanimlari': 'izin-tanimlari',
+    'izin-cakisma': 'izin-cakisma',
+    'pdks': 'pdks',
+    'performans': 'performans',
+    'ise-alim': 'ise-alim',
+    'onboarding': 'onboarding',
+    'egitim': 'egitim',
+    'analitik': 'analitik',
+    'yetkinlik': 'yetkinlik',
+    'okr': 'okr',
+    'yan-haklar': 'yan-haklar',
+    'zimmet': 'zimmet',
+    'org-sema': 'org-sema',
+    'form-builder': 'form-builder',
+    'kvkk': 'kvkk',
     'kullanicilar': 'kullanicilar',
     'sistem': 'ayar',
     'takvim': 'uyari',

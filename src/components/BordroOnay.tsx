@@ -161,21 +161,26 @@ const BordroOnay: React.FC<BordroOnayProps> = ({
         }
       }
 
-      const approval = {
-        bordro_id: bordro.id,
-        company_id: bordro.company_id,
-        employee_id: employeeId,
-        employee_name: employeeName,
-        verification_method: verificationMethod,
-        signature_data: verificationMethod === 'signature' ? signatureData : undefined,
-        id_document_data: verificationMethod === 'id_document' ? idDocumentData : undefined,
-        passcode_hash: verificationMethod === 'passcode' ? passcodeData : undefined,
-        approval_status: 'onaylandi' as const,
-        ip_address: '',
-        user_agent: navigator.userAgent
-      };
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      const bordroIdIsValid = uuidRegex.test(bordro.id);
 
-      await bordroService.createApproval(approval);
+      if (bordroIdIsValid) {
+        const approval = {
+          bordro_id: bordro.id,
+          company_id: bordro.company_id,
+          employee_id: employeeId,
+          employee_name: employeeName,
+          verification_method: verificationMethod,
+          signature_data: verificationMethod === 'signature' ? signatureData : undefined,
+          id_document_data: verificationMethod === 'id_document' ? idDocumentData : undefined,
+          passcode_hash: verificationMethod === 'passcode' ? passcodeData : undefined,
+          approval_status: 'onaylandi' as const,
+          ip_address: '',
+          user_agent: navigator.userAgent
+        };
+
+        await bordroService.createApproval(approval);
+      }
 
       setShowModal(false);
       if (onApprovalComplete) {

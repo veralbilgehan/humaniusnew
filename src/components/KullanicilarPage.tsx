@@ -440,6 +440,7 @@ const KullanicilarPage: React.FC = () => {
         })}
       </div>
 
+
       {/* Filters */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
         <div className="flex flex-col sm:flex-row gap-3">

@@ -39,13 +39,13 @@ interface EntityResult {
 // ─── Static page index ───────────────────────────────────────────────────────
 
 const PAGES: { id: View; label: string; icon: string; keywords: string[] }[] = [
-  { id: 'personel',               label: 'Tüm Personel',            icon: '👥', keywords: ['personel', 'çalışan', 'liste', 'yönetim', 'kadro', 'employee'] },
-  { id: 'bordro',                 label: 'Bordro İşlemleri',        icon: '💳', keywords: ['bordro', 'maaş', 'hesaplama', 'ücret', 'net', 'brüt', 'payroll'] },
+  { id: 'personel',               label: 'Şirket ve Personel',      icon: '👥', keywords: ['personel', 'çalışan', 'liste', 'yönetim', 'kadro', 'employee', 'şirket', 'kullanıcı'] },
+  { id: 'bordro',                 label: 'Bordro Düzenleme',        icon: '💳', keywords: ['bordro', 'maaş', 'hesaplama', 'ücret', 'net', 'brüt', 'payroll'] },
   { id: 'bordro-onay',            label: 'Bordro Onay',             icon: '✅', keywords: ['bordro', 'onay', 'passcode', 'imza', 'şifre'] },
   { id: 'izin',                   label: 'İzin Yönetimi',           icon: '📅', keywords: ['izin', 'talep', 'takvim', 'yıllık', 'mazeret', 'leave'] },
   { id: 'raporlar',               label: 'Raporlar',                icon: '📊', keywords: ['rapor', 'istatistik', 'analiz', 'report'] },
-  { id: 'uyari',                  label: 'Uyarılar & Takvim',       icon: '🔔', keywords: ['uyarı', 'takvim', 'etkinlik', 'hatırlatma', 'calendar'] },
-  { id: 'ayar',                   label: 'Sistem Ayarları',         icon: '⚙️', keywords: ['ayar', 'sistem', 'yapılandırma', 'settings', 'kullanıcı', 'user', 'şirket', 'company', 'rol', 'yetki'] },
+  { id: 'uyari',                  label: 'Uyarılar Takvimi',        icon: '🔔', keywords: ['uyarı', 'takvim', 'etkinlik', 'hatırlatma', 'calendar'] },
+  { id: 'ayar',                   label: 'Personel ve Şirket Yönetimi', icon: '⚙️', keywords: ['ayar', 'sistem', 'yapılandırma', 'settings', 'kullanıcı', 'user', 'şirket', 'company', 'rol', 'yetki'] },
   { id: 'gorev-tanimi',           label: 'Görev Tanımı',            icon: '📋', keywords: ['görev', 'tanım', 'rol', 'iş tanımı', 'job'] },
   { id: 'gorev-tanimi-kayitlari', label: 'Görev Tanım Kayıtları',   icon: '📁', keywords: ['görev', 'kayıt', 'geçmiş', 'history'] },
 ];
@@ -114,9 +114,16 @@ function HighlightMulti({ text, words }: { text: string; words: string[] }) {
 export const SearchPage: React.FC<SearchPageProps> = ({
   employees, izinTalepleri, bordrolar, onEmployeeClick, onNavigate,
 }) => {
+  const QUICK_APPROVAL_QUERY = 'personel onay ve doğrulama şifresi al';
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState<Category | 'all'>('all');
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleApprovalPasswordShortcut = () => {
+    setQuery(QUICK_APPROVAL_QUERY);
+    setActiveTab('all');
+    onNavigate('ayar');
+  };
 
   useEffect(() => { inputRef.current?.focus(); }, []);
 
@@ -375,8 +382,19 @@ export const SearchPage: React.FC<SearchPageProps> = ({
       <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-100 px-6 py-4 shadow-sm">
         <div className="max-w-3xl mx-auto space-y-3">
 
+          {/* Shortcut */}
+          <div className="mt-[2.2cm]">
+            <button
+              onClick={handleApprovalPasswordShortcut}
+              className="inline-flex items-center gap-2 rounded-xl border border-violet-300 bg-violet-50 px-4 py-2.5 text-sm font-semibold text-violet-700 hover:bg-violet-100 transition-colors"
+            >
+              <span className="text-base">🔑</span>
+              <span>Personel onay ve doğrulama şifresi al</span>
+            </button>
+          </div>
+
           {/* Input */}
-          <div className="relative mt-[3cm]">
+          <div className="relative">
             <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-xl border-2 border-gray-200 focus-within:border-blue-400 hover:border-blue-300 shadow-sm transition-all">
               <Search className="w-5 h-5 text-blue-400 shrink-0" />
               <input

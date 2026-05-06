@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   FolderOpen, Upload, Download, Trash2, FileText, User, Calendar,
-  AlertTriangle, Briefcase, Clock, RefreshCw, Plus, X, ChevronDown,
+  AlertTriangle, Briefcase, Clock, RefreshCw, Plus, X, ChevronDown, Lock,
   Building2, Phone, Mail, MapPin, Shield, FileBadge, ClipboardList, CheckCircle,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ozlukDosyasiService, OzlukDosya } from '../services/ozlukDosyasiService';
 import { gorevTanimiService, type GorevTanimi } from '../services/gorevTanimiService';
+import { employeeService } from '../services/employeeService';
+import PasscodeVerificationModal from './PasscodeVerificationModal';
 import type { Employee } from '../types';
 import type { IzinTalebi, IzinHakki } from '../types/izin';
 import type { BordroItem } from '../types/bordro';
@@ -158,9 +160,10 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
 
   // Yedekleme
   const [showBackupModal, setShowBackupModal] = useState(false);
-  const [backupSifre, setBackupSifre] = useState('');
-  const [backupHata, setBackupHata] = useState('');
-  const [backupBasarili, setBackupBasarili] = useState(false);
+
+  // Güvenli erişim kapısı
+  const [isAccessGranted, setIsAccessGranted] = useState(false);
+  const [showAccessModal, setShowAccessModal] = useState(false);
 
   const selectedEmp = companyEmployees.find((e) => e.id === selectedEmpId) ?? null;
 
@@ -194,6 +197,32 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
       .catch((err) => setDosyaError(err?.message ?? 'Belgeler yüklenemedi'))
       .finally(() => setDosyaLoading(false));
   }, [selectedEmpId]);
+
+  // Personel değişince erişim sıfırla
+  useEffect(() => {
+    // Şifre tanımlı değilse kiliínci gizle, direkt erişim ver
+    const emp = companyEmployees.find((e) => e.id === selectedEmpId) ?? null;
+    setIsAccessGranted(!emp?.approval_passcode);
+    setShowAccessModal(false);
+  }, [selectedEmpId]);
+
+  // Erişim doğrulama
+  const handleAccessVerify = async (passcode: string): Promise<boolean> => {
+    const stored = selectedEmp?.approval_passcode;
+    if (!stored) { setIsAccessGranted(true); return true; }
+    if (stored !== passcode) return false;
+    setIsAccessGranted(true);
+    return true;
+  };
+
+  // Yedekleme doğrulama
+  const handleBackupVerify = async (passcode: string): Promise<boolean> => {
+    if (!selectedEmp) return false;
+    const stored = selectedEmp.approval_passcode;
+    if (stored && stored !== passcode) return false;
+    performBackup();
+    return true;
+  };
 
   const reloadDosyalar = async () => {
     if (!selectedEmpId) return;
@@ -282,14 +311,9 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
     }
   };
 
-  // Yedekleme işlemi
-  const handleBackup = () => {
+  // Yedekleme işlemi (doğrudan çağrılır, şifre kontrolü handleBackupVerify'da)
+  const performBackup = () => {
     if (!selectedEmp) return;
-    const dogru = selectedEmp.approval_passcode;
-    if (dogru && backupSifre !== dogru) {
-      setBackupHata('Şifre hatalı, yedekleme yapılamadı.');
-      return;
-    }
 
     const empBordroForBackup = bordrolar.filter((b) => b.employee_id === selectedEmpId);
     const empIzinHakkiForBackup = izinHaklari.find((h) => h.employeeId === selectedEmpId);
@@ -365,14 +389,23 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
       })),
     };
 
+    // localStorage'a da kaydet
     localStorage.setItem(`ozluk_yedek_${selectedEmpId}`, JSON.stringify(yedek));
-    setBackupBasarili(true);
-    setBackupHata('');
-    setBackupSifre('');
-    setTimeout(() => {
-      setShowBackupModal(false);
-      setBackupBasarili(false);
-    }, 2000);
+
+    // Tarayıcı "Farklı Kaydet" dialogunu aç
+    const tarihStr = new Date().toISOString().slice(0, 10);
+    const empAdi = (selectedEmp.name ?? 'personel').replace(/\s+/g, '_');
+    const dosyaAdi = `ozluk_${empAdi}_${tarihStr}.json`;
+
+    const blob = new Blob([JSON.stringify(yedek, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = dosyaAdi;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   // İzin verileri
@@ -470,7 +503,14 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
               </div>
             </div>
             <button
-              onClick={() => { setShowBackupModal(true); setBackupSifre(''); setBackupHata(''); setBackupBasarili(false); }}
+              onClick={() => {
+                if (selectedEmp?.approval_passcode) {
+                  setShowBackupModal(true);
+                } else {
+                  // Şifre tanımlı değil, direkt yedekle
+                  performBackup();
+                }
+              }}
               className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 active:scale-95 transition-all shadow-sm"
               title="Özlük dosyasını yerel depoya yedekle"
             >
@@ -489,69 +529,55 @@ const OzlukDosyasi: React.FC<OzlukDosyasiProps> = ({
         </div>
       )}
 
-      {/* Yedekleme şifre modalı */}
+      {/* Yedekleme Güvenli Belge Onayı modalı */}
       {showBackupModal && selectedEmp && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-gray-900">Özlük Dosyası Yedekle</h3>
-              <button
-                onClick={() => { setShowBackupModal(false); setBackupSifre(''); setBackupHata(''); }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="text-sm text-gray-600 mb-4">
-              <strong>{selectedEmp.name}</strong> adlı personelin tüm özlük bilgileri
-              (belgeler, bordro, izin, görev tanımı, tutanaklar) yerel depolamaya kaydedilecek.
-              {selectedEmp.approval_passcode
-                ? ' Devam etmek için onay şifresini girin.'
-                : ' Şifre tanımlanmamış, doğrulama atlanır.'}
-            </p>
-            {backupBasarili ? (
-              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-xl">
-                <CheckCircle className="w-5 h-5 text-green-600 shrink-0" />
-                <p className="text-sm font-medium text-green-700">Yedekleme başarıyla tamamlandı!</p>
-              </div>
-            ) : (
-              <>
-                {selectedEmp.approval_passcode && (
-                  <input
-                    type="password"
-                    value={backupSifre}
-                    onChange={(e) => { setBackupSifre(e.target.value); setBackupHata(''); }}
-                    onKeyDown={(e) => e.key === 'Enter' && handleBackup()}
-                    placeholder="Onay şifresi"
-                    className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-                    autoFocus
-                  />
-                )}
-                {backupHata && (
-                  <p className="text-xs text-red-600 mb-2">{backupHata}</p>
-                )}
-                <div className="flex gap-2 mt-3">
-                  <button
-                    onClick={() => { setShowBackupModal(false); setBackupSifre(''); setBackupHata(''); }}
-                    className="flex-1 px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-50"
-                  >
-                    İptal
-                  </button>
-                  <button
-                    onClick={handleBackup}
-                    disabled={!!selectedEmp.approval_passcode && !backupSifre.trim()}
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    Yedekle
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+        <PasscodeVerificationModal
+          isOpen={showBackupModal}
+          onClose={() => setShowBackupModal(false)}
+          onVerify={handleBackupVerify}
+          employeeName={selectedEmp.name}
+          title="Özlük Dosyası Yedekleme"
+          actionLabel="Yedekle"
+          actionDescription="Personelin tüm özlük bilgileri (belgeler, bordro, izin, görev tanımı, tutanaklar) yerel depolamaya kaydedilecek."
+          actionColor="indigo"
+          tcNo={selectedEmp.tc_no ?? undefined}
+        />
+      )}
+
+      {/* Erişim kapısı modalı */}
+      {showAccessModal && selectedEmp && (
+        <PasscodeVerificationModal
+          isOpen={showAccessModal}
+          onClose={() => { setShowAccessModal(false); setSelectedEmpId(''); }}
+          onVerify={handleAccessVerify}
+          employeeName={selectedEmp.name}
+          title="Güvenli Belge Onayı"
+          actionLabel="Dosyaya Eriş"
+          actionDescription="Özlük dosyasına erişmek için kimliğinizi doğrulayın."
+          actionColor="blue"
+          tcNo={selectedEmp.tc_no ?? undefined}
+        />
+      )}
+
+      {selectedEmp && !isAccessGranted && (
+        <div className="bg-white rounded-2xl border border-blue-200 p-10 text-center">
+          <Shield className="w-14 h-14 text-blue-400 mx-auto mb-4" />
+          <h3 className="text-lg font-bold text-gray-800 mb-2">Güvenli Erişim Gerekli</h3>
+          <p className="text-sm text-gray-500 mb-6">
+            <strong>{selectedEmp.name}</strong> adlı personelin özlük dosyasına erişmek için
+            onay şifresini girmeniz gerekmektedir.
+          </p>
+          <button
+            onClick={() => setShowAccessModal(true)}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors"
+          >
+            <Lock className="w-4 h-4" />
+            Şifre ile Aç
+          </button>
         </div>
       )}
 
-      {selectedEmp && (
+      {selectedEmp && isAccessGranted && (
         <>
           {/* Sekmeler */}
           <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">

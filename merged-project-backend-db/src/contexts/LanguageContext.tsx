@@ -13,11 +13,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 const translations = {
   tr: {
     // Sidebar
-    'sidebar.allPersonnel': 'Tüm Personel',
+    'sidebar.allPersonnel': 'Şirket ve Personel',
     'sidebar.leaveManagement': 'İzin Yönetimi',
     'sidebar.reports': 'Raporlar',
-    'sidebar.payroll': 'Bordro',
-    'sidebar.alertsCalendar': 'Uyarılar & Takvim',
+    'sidebar.payroll': 'Bordro Düzenleme',
+    'sidebar.alertsCalendar': 'Uyarılar Takvimi',
     'sidebar.systemSettings': 'Sistem Ayarları',
     'sidebar.searchPlaceholder': 'Personel, departman, pozisyon...',
     
@@ -200,10 +200,10 @@ const translations = {
   },
   en: {
     // Sidebar
-    'sidebar.allPersonnel': 'All Personnel',
+    'sidebar.allPersonnel': 'Companies & Personnel',
     'sidebar.leaveManagement': 'Leave Management',
     'sidebar.reports': 'Reports',
-    'sidebar.payroll': 'Payroll',
+    'sidebar.payroll': 'Payroll Editing',
     'sidebar.alertsCalendar': 'Alerts & Calendar',
     'sidebar.systemSettings': 'System Settings',
     'sidebar.searchPlaceholder': 'Employee, department, position...',
