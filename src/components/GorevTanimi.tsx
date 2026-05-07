@@ -411,7 +411,6 @@ export default function GorevTanimi({ mode = 'form', employees: employeesProp }:
             <div className="flex flex-wrap items-center gap-3">
               <FileText className="h-8 w-8" />
               <h1 className="text-3xl font-semibold">GÖREV TANIMI</h1>
-              <span className="rounded-full bg-green-600 px-4 py-1 text-sm">Tedarik Zinciri Müdürü</span>
             </div>
             <div className="mt-4 flex flex-wrap gap-6 text-sm text-slate-300">
               <div className="flex items-center gap-2">
