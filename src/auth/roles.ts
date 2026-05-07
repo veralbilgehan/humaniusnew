@@ -18,14 +18,14 @@ export function getRoleLabel(role: AppRole): string {
 export function getDefaultViewForRole(role: AppRole): View {
   if (role === 'superadmin') return 'personel';
   if (role === 'admin') return 'personel';
-  return 'arama';
+  return 'bordro';
 }
 
 export function canAccessView(role: AppRole, view: View): boolean {
   const allowedViews: Record<AppRole, View[]> = {
     superadmin: ['arama', 'personel', 'bordro', 'bordro-onay', 'izin', 'raporlar', 'uyari', 'ayar', 'gorev-tanimi', 'gorev-tanimi-kayitlari', 'ozluk-dosyasi', 'kullanicilar', 'kullanim-kilavuzu', 'pdks', 'performans', 'ise-alim', 'egitim', 'analitik', 'kvkk', 'izin-tanimlari', 'org-sema', 'zimmet', 'okr', 'yetkinlik', 'onboarding', 'yan-haklar', 'izin-cakisma', 'form-builder'],
     admin:      ['arama', 'personel', 'bordro', 'bordro-onay', 'izin', 'raporlar', 'uyari', 'ayar', 'gorev-tanimi', 'gorev-tanimi-kayitlari', 'ozluk-dosyasi', 'kullanicilar', 'kullanim-kilavuzu', 'pdks', 'performans', 'ise-alim', 'egitim', 'analitik', 'kvkk', 'izin-tanimlari', 'org-sema', 'zimmet', 'okr', 'yetkinlik', 'onboarding', 'yan-haklar', 'izin-cakisma', 'form-builder'],
-    user:       ['arama', 'bordro', 'izin', 'gorev-tanimi', 'kullanim-kilavuzu', 'pdks', 'performans', 'egitim', 'okr', 'yetkinlik'],
+    user:       ['gorev-tanimi', 'ozluk-dosyasi', 'org-sema', 'zimmet', 'bordro', 'izin', 'uyari', 'egitim'],
   };
 
   return allowedViews[role].includes(view);
