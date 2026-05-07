@@ -67,10 +67,10 @@ const DURUM_COLOR: Record<string, string> = {
 };
 
 const CAT_STYLE: Record<Category, { bg: string; border: string; text: string; dot: string; hoverBg: string }> = {
-  personel: { bg: 'bg-blue-50',    border: 'border-blue-200',    text: 'text-blue-700',    dot: 'bg-blue-500',    hoverBg: 'hover:bg-blue-100/60'    },
-  izin:     { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', dot: 'bg-emerald-500', hoverBg: 'hover:bg-emerald-100/60' },
-  bordro:   { bg: 'bg-purple-50',  border: 'border-purple-200',  text: 'text-purple-700',  dot: 'bg-purple-500',  hoverBg: 'hover:bg-purple-100/60'  },
-  sayfa:    { bg: 'bg-orange-50',  border: 'border-orange-200',  text: 'text-orange-700',  dot: 'bg-orange-400',  hoverBg: 'hover:bg-orange-100/60'  },
+  personel: { bg: 'bg-green-50',  border: 'border-green-200',  text: 'text-green-700',  dot: 'bg-green-600',  hoverBg: 'hover:bg-green-100/60'  },
+  izin:     { bg: 'bg-slate-50',  border: 'border-slate-200',  text: 'text-slate-700',  dot: 'bg-slate-600',  hoverBg: 'hover:bg-slate-100/60'  },
+  bordro:   { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', dot: 'bg-orange-600', hoverBg: 'hover:bg-orange-100/60' },
+  sayfa:    { bg: 'bg-gray-50',   border: 'border-gray-200',   text: 'text-gray-700',   dot: 'bg-gray-500',   hoverBg: 'hover:bg-gray-100/60'   },
 };
 
 const CAT_ORDER: Category[] = ['personel', 'izin', 'bordro', 'sayfa'];

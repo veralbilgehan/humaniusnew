@@ -11,6 +11,23 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const formatAuthError = (err: unknown, fallback: string) => {
+    const rawMessage = typeof err === 'object' && err !== null && 'message' in err
+      ? String((err as { message?: string }).message ?? '')
+      : '';
+    const lower = rawMessage.toLowerCase();
+
+    if (!navigator.onLine) {
+      return 'İnternet bağlantısı yok. Lütfen bağlantınızı kontrol edip tekrar deneyin.';
+    }
+
+    if (lower.includes('failed to fetch') || lower.includes('networkerror') || lower.includes('load failed')) {
+      return 'Sunucuya bağlanılamadı. VPN, güvenlik duvarı veya ağ bağlantınızı kontrol edip tekrar deneyin.';
+    }
+
+    return rawMessage || fallback;
+  };
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
@@ -23,7 +40,7 @@ export default function Login() {
         if (error.message.includes('Invalid login credentials')) {
           setError('E-posta veya şifre hatalı. Lütfen tekrar deneyin.');
         } else {
-          setError(error.message);
+          setError(formatAuthError(error, 'Giriş sırasında bir hata oluştu.'));
         }
         setLoading(false);
         return;
@@ -51,7 +68,7 @@ export default function Login() {
         }
       }
     } catch (err: any) {
-      setError(err.message || 'Bir hata oluştu');
+      setError(formatAuthError(err, 'Bir hata oluştu'));
     } finally {
       setLoading(false);
     }
@@ -72,12 +89,12 @@ export default function Login() {
             </p>
           </div>
 
-          <div className="mt-8 rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-5 text-sm text-cyan-50">
+            <div className="mt-8 rounded-3xl border border-orange-400/20 bg-orange-400/10 p-5 text-sm text-orange-50">
             <div className="flex items-center gap-2 font-medium">
               <KeyRound className="h-4 w-4" />
               Parola yönetimi
             </div>
-            <p className="mt-2 leading-6 text-cyan-100/90">
+            <p className="mt-2 leading-6 text-orange-100/90">
               Oturum açan kullanıcı kendi şifresini Sistem Ayarları içinden değiştirebilir. Başka kullanıcıların şifresini merkezi olarak değiştirmek için ayrıca güvenli bir yönetici servisi gerekir.
             </p>
           </div>
@@ -86,7 +103,7 @@ export default function Login() {
         <section className="flex items-center justify-center">
           <div className="w-full max-w-md rounded-[32px] bg-white p-8 shadow-2xl md:p-10">
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-500 rounded-2xl mb-6 shadow-lg">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-600 via-orange-500 to-green-700 rounded-2xl mb-6 shadow-lg">
                 <Building2 className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-3xl font-bold text-gray-800 mb-2">Giriş Yap</h2>
@@ -108,7 +125,7 @@ export default function Login() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all bg-white text-sm"
+                  className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all bg-white text-sm"
                   placeholder="ornek@sirket.com"
                   required
                 />
@@ -122,7 +139,7 @@ export default function Login() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all bg-white text-sm"
+                  className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all bg-white text-sm"
                   placeholder="••••••••"
                   required
                   minLength={6}
@@ -132,7 +149,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-slate-900 via-cyan-700 to-teal-600 text-white py-4 rounded-xl font-semibold hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base"
+                className="w-full bg-gradient-to-r from-slate-900 via-orange-600 to-green-700 text-white py-4 rounded-xl font-semibold hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base"
               >
                 {loading ? (
                   <div className="flex items-center gap-2">

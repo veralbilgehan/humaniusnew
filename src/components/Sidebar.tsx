@@ -238,11 +238,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                 }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
                   isHighlighted
-                    ? 'bg-blue-50 border border-blue-200 text-blue-700'
+                      ? 'bg-green-50 border border-green-200 text-green-700'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-800 border border-transparent'
                 }`}
               >
-                {isHighlighted && <div className="w-2 h-2 rounded-full bg-blue-500" />}
+                {isHighlighted && <div className="w-2 h-2 rounded-full bg-green-600" />}
                 <Icon className="w-4 h-4" />
                 <span className="font-medium">{item.label}</span>
                 {hasChildren && (
@@ -261,7 +261,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         onClick={() => onViewChange(child.id)}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
                           isChildActive
-                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            ? 'bg-green-50 text-green-700 font-medium'
                             : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                         }`}
                       >
@@ -291,11 +291,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                   onClick={() => onViewChange(item.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
                     isActive
-                      ? 'bg-indigo-50 border border-indigo-200 text-indigo-700'
+                      ? 'bg-orange-50 border border-orange-200 text-orange-700'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-800 border border-transparent'
                   }`}
                 >
-                  {isActive && <div className="w-2 h-2 rounded-full bg-indigo-500" />}
+                  {isActive && <div className="w-2 h-2 rounded-full bg-orange-600" />}
                   <Icon className="w-4 h-4" />
                   <span className="font-medium">{item.label}</span>
                 </button>

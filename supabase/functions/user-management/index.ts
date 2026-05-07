@@ -198,11 +198,12 @@ Deno.serve(async (req: Request) => {
       const allowedRoles: ProfileRole[] = ['admin', 'manager', 'employee', 'hr', 'user'];
       let nextRole: ProfileRole = allowedRoles.includes(requestedRole) ? requestedRole : 'employee';
 
-      // Sadece superadmin başka admin veya superadmin oluşturabilir
+      // Superadmin rolü hiçbir zaman bu işlemle oluşturulamaz
       if (requestedRole === 'superadmin') {
         return jsonResponse({ error: 'Süper admin rolü bu işlemle oluşturulamaz.' }, 403);
       }
-      if (requestedRole === 'admin' && profile.role !== 'superadmin') {
+      // Admin kendi şirketine başka admin atayabilir; sadece superadmin başka şirkete admin atayabilir
+      if (requestedRole === 'admin' && profile.role !== 'superadmin' && profile.role !== 'admin') {
         nextRole = 'employee';
       }
 

@@ -13,6 +13,23 @@ export default function Login() {
   const [resetSent, setResetSent] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
 
+  const formatAuthError = (err: unknown, fallback: string) => {
+    const rawMessage = typeof err === 'object' && err !== null && 'message' in err
+      ? String((err as { message?: string }).message ?? '')
+      : '';
+    const lower = rawMessage.toLowerCase();
+
+    if (!navigator.onLine) {
+      return 'İnternet bağlantısı yok. Lütfen bağlantınızı kontrol edip tekrar deneyin.';
+    }
+
+    if (lower.includes('failed to fetch') || lower.includes('networkerror') || lower.includes('load failed')) {
+      return 'Sunucuya bağlanılamadı. VPN, güvenlik duvarı veya ağ bağlantınızı kontrol edip tekrar deneyin.';
+    }
+
+    return rawMessage || fallback;
+  };
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setError('');
@@ -20,10 +37,11 @@ export default function Login() {
     try {
       const { error: signInError } = await signIn(email.trim(), password);
       if (signInError) {
+        const friendlyMessage = formatAuthError(signInError, 'Giriş sırasında bir hata oluştu.');
         setError(
           signInError.message.includes('Invalid login credentials')
             ? 'E-posta veya parola hatalı.'
-            : signInError.message
+            : friendlyMessage
         );
         return;
       }
@@ -45,7 +63,7 @@ export default function Login() {
         }
       }
     } catch (err: any) {
-      setError(err.message || 'Bir hata oluştu.');
+      setError(formatAuthError(err, 'Giriş sırasında bir hata oluştu.'));
     } finally {
       setLoading(false);
     }
@@ -63,7 +81,7 @@ export default function Login() {
       if (resetError) throw resetError;
       setResetSent(true);
     } catch (err: any) {
-      setError(err.message || 'Sıfırlama maili gönderilemedi.');
+      setError(formatAuthError(err, 'Sıfırlama maili gönderilemedi.'));
     } finally {
       setResetLoading(false);
     }
@@ -75,7 +93,7 @@ export default function Login() {
 
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-500 rounded-2xl mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-600 via-orange-500 to-green-700 rounded-2xl mb-4 shadow-lg">
             <Building2 className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white">Humanius</h1>
@@ -130,7 +148,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={resetLoading}
-                  className="w-full bg-gradient-to-r from-slate-900 via-cyan-700 to-teal-600 text-white py-3.5 rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-slate-900 via-orange-600 to-green-700 text-white py-3.5 rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {resetLoading ? 'Gönderiliyor...' : 'Sıfırlama Maili Gönder'}
                 </button>
@@ -193,7 +211,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-gradient-to-r from-slate-900 via-cyan-700 to-teal-600 text-white py-3.5 rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-slate-900 via-orange-600 to-green-700 text-white py-3.5 rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <>

@@ -1,10 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Building2, KeyRound, Shield, UserPlus, Users } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { getRoleLabel } from '../auth/roles';
 import { companyService } from '../services/companyService';
 import { userManagementService } from '../services/userManagementService';
 import { supabase } from '../lib/supabase';
+
+const ROLE_LABELS: Record<string, string> = {
+  superadmin: 'Süper Yönetici',
+  admin: 'Şirket Yöneticisi',
+  manager: 'Müdür',
+  hr: 'İK Uzmanı',
+  employee: 'Personel',
+  user: 'Kullanıcı',
+};
 
 interface ManagedProfile {
   id: string;
@@ -25,7 +33,7 @@ const DEFAULT_PASSWORD = '123456';
 const DEFAULT_SUPERADMIN_EMAIL = 'superadmin@humanius.local';
 
 export default function UserManagementPanel() {
-  const { profile, appRole, isSuperAdmin } = useAuth();
+  const { profile, appRole, isSuperAdmin, isAdmin } = useAuth();
   const [companies, setCompanies] = useState<CompanyRow[]>([]);
   const [profiles, setProfiles] = useState<ManagedProfile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,7 +56,7 @@ export default function UserManagementPanel() {
     fullName: '',
     email: '',
     password: DEFAULT_PASSWORD,
-    role: 'user' as 'admin' | 'user',
+    role: 'employee' as 'admin' | 'employee',
   });
 
   const [passwordDrafts, setPasswordDrafts] = useState<Record<string, string>>({});
@@ -165,7 +173,7 @@ export default function UserManagementPanel() {
         fullName: '',
         email: '',
         password: DEFAULT_PASSWORD,
-        role: isSuperAdmin ? 'user' : prev.role,
+        role: isSuperAdmin ? 'employee' : prev.role,
       }));
       await loadManagementData();
     } catch (createError: any) {
@@ -204,7 +212,7 @@ export default function UserManagementPanel() {
               <h2 className="text-2xl font-bold text-gray-900">Kullanıcı ve Yetki Yönetimi</h2>
             </div>
             <p className="text-sm text-gray-600">
-              Aktif rolünüz: <span className="font-semibold text-gray-800">{getRoleLabel(appRole)}</span>
+              Aktif rolünüz: <span className="font-semibold text-gray-800">{ROLE_LABELS[appRole] ?? appRole}</span>
             </p>
           </div>
 
@@ -279,10 +287,10 @@ export default function UserManagementPanel() {
               ))}
             </select>
           )}
-          {isSuperAdmin && (
-            <select value={userForm.role} onChange={(e) => setUserForm((prev) => ({ ...prev, role: e.target.value as 'admin' | 'user' }))} className="rounded-xl border border-gray-200 px-4 py-3 text-sm">
-              <option value="user">Kullanıcı</option>
-              <option value="admin">Şirket Admin</option>
+          {(isSuperAdmin || isAdmin) && (
+            <select value={userForm.role} onChange={(e) => setUserForm((prev) => ({ ...prev, role: e.target.value as 'admin' | 'employee' }))} className="rounded-xl border border-gray-200 px-4 py-3 text-sm">
+              <option value="employee">Personel</option>
+              <option value="admin">Şirket Yöneticisi</option>
             </select>
           )}
           <input value={userForm.fullName} onChange={(e) => setUserForm((prev) => ({ ...prev, fullName: e.target.value }))} placeholder="Ad soyad" className="rounded-xl border border-gray-200 px-4 py-3 text-sm" required />
@@ -324,7 +332,7 @@ export default function UserManagementPanel() {
                         <p className="text-sm text-gray-500">{managed.email}</p>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">{managed.role}</td>
+                    <td className="px-6 py-4 text-sm text-gray-700">{ROLE_LABELS[managed.role] ?? managed.role}</td>
                     <td className="px-6 py-4 text-sm text-gray-700">{managed.company_id ? (companyNameById[managed.company_id] || managed.company_id) : 'Sistem geneli'}</td>
                     <td className="px-6 py-4">
                       <input
