@@ -1,10 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Building2, KeyRound, Shield, UserPlus, Users } from 'lucide-react';
+import { Building2, CheckCircle, Copy, KeyRound, Shield, UserPlus, Users, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { getRoleLabel } from '../auth/roles';
 import { companyService } from '../services/companyService';
 import { userManagementService } from '../services/userManagementService';
 import { supabase } from '../lib/supabase';
+
+const ROLE_LABELS: Record<string, string> = {
+  superadmin: 'Süper Yönetici',
+  admin: 'Şirket Yöneticisi',
+  manager: 'Müdür',
+  hr: 'İK Uzmanı',
+  employee: 'Personel',
+  user: 'Kullanıcı',
+};
 
 interface ManagedProfile {
   id: string;
@@ -25,7 +33,7 @@ const DEFAULT_PASSWORD = '123456';
 const DEFAULT_SUPERADMIN_EMAIL = 'superadmin@humanius.local';
 
 export default function UserManagementPanel() {
-  const { profile, appRole, isSuperAdmin } = useAuth();
+  const { profile, appRole, isSuperAdmin, isAdmin } = useAuth();
   const [companies, setCompanies] = useState<CompanyRow[]>([]);
   const [profiles, setProfiles] = useState<ManagedProfile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,10 +56,12 @@ export default function UserManagementPanel() {
     fullName: '',
     email: '',
     password: DEFAULT_PASSWORD,
-    role: 'user' as 'admin' | 'user',
+    role: 'employee' as 'admin' | 'employee',
   });
 
   const [passwordDrafts, setPasswordDrafts] = useState<Record<string, string>>({});
+  const [newUserCard, setNewUserCard] = useState<{ fullName: string; email: string; password: string; role: string } | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
 
   const loadManagementData = async () => {
     try {
@@ -158,21 +168,32 @@ export default function UserManagementPanel() {
       setError('');
       setMessage('');
 
-      const response = await userManagementService.createCompanyUser(userForm);
-      setMessage(response.message || 'Kullanıcı oluşturuldu.');
+      await userManagementService.createCompanyUser(userForm);
+      setNewUserCard({
+        fullName: userForm.fullName,
+        email: userForm.email,
+        password: userForm.password,
+        role: userForm.role,
+      });
       setUserForm((prev) => ({
         ...prev,
         fullName: '',
         email: '',
         password: DEFAULT_PASSWORD,
-        role: isSuperAdmin ? 'user' : prev.role,
+        role: isSuperAdmin ? 'employee' : prev.role,
       }));
       await loadManagementData();
     } catch (createError: any) {
-      setError(createError.message ?? 'Kullanıcı oluşturulamadı.');
+      setError(createError.message ?? 'Personel eklenemedi.');
     } finally {
       setBusy(null);
     }
+  };
+
+  const handleCopy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
   };
 
   const handleResetPassword = async (userId: string) => {
@@ -204,7 +225,7 @@ export default function UserManagementPanel() {
               <h2 className="text-2xl font-bold text-gray-900">Kullanıcı ve Yetki Yönetimi</h2>
             </div>
             <p className="text-sm text-gray-600">
-              Aktif rolünüz: <span className="font-semibold text-gray-800">{getRoleLabel(appRole)}</span>
+              Aktif rolünüz: <span className="font-semibold text-gray-800">{ROLE_LABELS[appRole] ?? appRole}</span>
             </p>
           </div>
 
@@ -267,7 +288,7 @@ export default function UserManagementPanel() {
       <form onSubmit={handleCreateUser} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-4">
         <div className="flex items-center gap-3">
           <UserPlus className="w-5 h-5 text-emerald-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Yeni Kullanıcı Oluştur</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Yeni Personel Ekle</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -279,10 +300,10 @@ export default function UserManagementPanel() {
               ))}
             </select>
           )}
-          {isSuperAdmin && (
-            <select value={userForm.role} onChange={(e) => setUserForm((prev) => ({ ...prev, role: e.target.value as 'admin' | 'user' }))} className="rounded-xl border border-gray-200 px-4 py-3 text-sm">
-              <option value="user">Kullanıcı</option>
-              <option value="admin">Şirket Admin</option>
+          {(isSuperAdmin || isAdmin) && (
+            <select value={userForm.role} onChange={(e) => setUserForm((prev) => ({ ...prev, role: e.target.value as 'admin' | 'employee' }))} className="rounded-xl border border-gray-200 px-4 py-3 text-sm">
+              <option value="employee">Personel</option>
+              <option value="admin">Şirket Yöneticisi</option>
             </select>
           )}
           <input value={userForm.fullName} onChange={(e) => setUserForm((prev) => ({ ...prev, fullName: e.target.value }))} placeholder="Ad soyad" className="rounded-xl border border-gray-200 px-4 py-3 text-sm" required />
@@ -291,9 +312,54 @@ export default function UserManagementPanel() {
         </div>
 
         <button type="submit" disabled={busy === 'user'} className="rounded-xl bg-emerald-600 text-white px-5 py-3 text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-60">
-          {busy === 'user' ? 'Oluşturuluyor...' : 'Kullanıcı Oluştur'}
+          {busy === 'user' ? 'Ekleniyor...' : 'Personel Ekle'}
         </button>
       </form>
+
+      {newUserCard && (
+        <div className="bg-white border-2 border-emerald-400 rounded-2xl p-6 shadow-md">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2 text-emerald-700">
+              <CheckCircle className="w-5 h-5" />
+              <span className="font-semibold text-base">Giriş Bilgileri Kartı</span>
+            </div>
+            <button onClick={() => setNewUserCard(null)} className="text-gray-400 hover:text-gray-600">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-5 text-white space-y-4">
+            <div>
+              <p className="text-slate-400 text-xs uppercase tracking-wide mb-1">Ad Soyad</p>
+              <p className="font-semibold text-lg">{newUserCard.fullName}</p>
+            </div>
+            <div>
+              <p className="text-slate-400 text-xs uppercase tracking-wide mb-1">Rol</p>
+              <p className="text-sm">{ROLE_LABELS[newUserCard.role] ?? newUserCard.role}</p>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
+                <p className="text-slate-400 text-xs uppercase tracking-wide mb-1">Kullanıcı Adı (E-posta)</p>
+                <p className="font-mono text-sm break-all">{newUserCard.email}</p>
+              </div>
+              <button onClick={() => handleCopy(newUserCard.email, 'email')} className="shrink-0 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                {copied === 'email' ? <CheckCircle className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
+                <p className="text-slate-400 text-xs uppercase tracking-wide mb-1">Şifre</p>
+                <p className="font-mono text-sm tracking-widest">{newUserCard.password}</p>
+              </div>
+              <button onClick={() => handleCopy(newUserCard.password, 'password')} className="shrink-0 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                {copied === 'password' ? <CheckCircle className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          <p className="text-xs text-gray-400 mt-3">Bu bilgileri personele iletmeyi unutmayın. Kart kapandıktan sonra şifre tekrar görüntülenemez.</p>
+        </div>
+      )}
 
       <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
@@ -324,7 +390,7 @@ export default function UserManagementPanel() {
                         <p className="text-sm text-gray-500">{managed.email}</p>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-700">{managed.role}</td>
+                    <td className="px-6 py-4 text-sm text-gray-700">{ROLE_LABELS[managed.role] ?? managed.role}</td>
                     <td className="px-6 py-4 text-sm text-gray-700">{managed.company_id ? (companyNameById[managed.company_id] || managed.company_id) : 'Sistem geneli'}</td>
                     <td className="px-6 py-4">
                       <input
