@@ -992,6 +992,26 @@ const AppInner: React.FC = () => {
 
         {/* Sistem Ayarları */}
         {currentView === 'ayar' && <SistemAyarlari />}
+
+        {/* Fallback: tanımsız görünümde boş sayfa yerine bilgilendirme göster */}
+        {![
+          'personel',
+          'gorev-tanimi',
+          'gorev-tanimi-kayitlari',
+          'ozluk-dosyasi',
+          'bordro',
+          'bordro-onay',
+          'izin',
+          'raporlar',
+          'uyari',
+          'kullanicilar',
+          'ayar',
+        ].includes(currentView) && (
+          <div className="bg-white border border-amber-200 rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-amber-700">Sayfa görüntülenemedi</h2>
+            <p className="text-sm text-gray-600 mt-2">Bu görünüm için içerik bulunamadı. Lütfen menüden başka bir sayfa seçin.</p>
+          </div>
+        )}
       </main>
     );
   };

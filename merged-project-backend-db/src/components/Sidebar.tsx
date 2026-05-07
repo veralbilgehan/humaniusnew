@@ -204,8 +204,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         {navItems.map(item => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
-          const hasChildren = item.children && item.children.length > 0;
-          const hasActiveChild = Boolean(hasChildren && item.children.some((child) => child.id === currentView));
+          const visibleChildren = item.children?.filter((child) => canAccessView(effectiveRole, child.id)) ?? [];
+          const hasChildren = visibleChildren.length > 0;
+          const hasActiveChild = Boolean(hasChildren && visibleChildren.some((child) => child.id === currentView));
           const isSectionOpen = openSections.includes(item.id);
           const isHighlighted = isActive || hasActiveChild;
 
@@ -241,7 +242,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </button>
               {hasChildren && isSectionOpen && (
                 <div className="ml-8 mt-1 space-y-1">
-                  {item.children.map(child => {
+                  {visibleChildren.map(child => {
                     const isChildActive = currentView === child.id;
                     return (
                       <button

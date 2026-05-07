@@ -25,7 +25,7 @@ export function canAccessView(role: AppRole, view: View): boolean {
   const allowedViews: Record<AppRole, View[]> = {
     superadmin: ['arama', 'personel', 'bordro', 'bordro-onay', 'izin', 'raporlar', 'uyari', 'ayar', 'gorev-tanimi', 'gorev-tanimi-kayitlari', 'ozluk-dosyasi'],
     admin:      ['arama', 'personel', 'bordro', 'bordro-onay', 'izin', 'raporlar', 'uyari', 'ayar', 'gorev-tanimi', 'gorev-tanimi-kayitlari', 'ozluk-dosyasi'],
-    user:       ['arama', 'bordro', 'izin', 'gorev-tanimi'],
+    user:       ['arama', 'personel', 'bordro', 'izin', 'gorev-tanimi', 'org-sema'],
   };
 
   return allowedViews[role].includes(view);

@@ -376,7 +376,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({
 
   // ────────────────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
 
       {/* Sticky header */}
       <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-100 px-6 py-4 shadow-sm">
@@ -452,15 +452,12 @@ export const SearchPage: React.FC<SearchPageProps> = ({
       </div>
 
       {/* Content */}
-      <div className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8">
+      <div className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-2 space-y-0">
 
         {/* No query — quick access */}
         {!words.length && (
           <>
             <section>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5" /> Hızlı Erişim
-              </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 {PAGES.map(page => {
                   const cs = page.id === 'kullanicilar' ? CAT_STYLE.sayfa
@@ -487,31 +484,13 @@ export const SearchPage: React.FC<SearchPageProps> = ({
               </div>
             </section>
 
-            <section className="grid grid-cols-3 gap-4">
-              {[
-                { label: 'Personel',    count: employees.length,     cat: 'personel' as Category },
-                { label: 'İzin Talebi', count: izinTalepleri.length, cat: 'izin'     as Category },
-                { label: 'Bordro',      count: bordrolar.length,     cat: 'bordro'   as Category },
-              ].map(item => {
-                const cs = CAT_STYLE[item.cat];
-                return (
-                  <button
-                    key={item.label}
-                    onClick={() => onNavigate(item.cat === 'izin' ? 'izin' : item.cat === 'bordro' ? 'bordro' : 'personel')}
-                    className={`${cs.bg} border ${cs.border} rounded-2xl px-4 py-4 text-center ${cs.hoverBg} transition-all`}
-                  >
-                    <p className={`text-3xl font-extrabold ${cs.text}`}>{item.count}</p>
-                    <p className="text-xs text-gray-500 mt-1">{item.label}</p>
-                  </button>
-                );
-              })}
+            <section className="flex justify-center py-0 sm:py-0">
+              <img
+                src="/search-hero.png"
+                alt="Humanius görseli"
+                className="h-auto w-full max-w-2xl object-contain"
+              />
             </section>
-
-            <div className="text-center text-sm text-gray-400 py-4">
-              <Search className="w-5 h-5 mx-auto mb-2 opacity-30" />
-              <p>Aramak istediğiniz kelimeyi veya cümleyi yazın</p>
-              <p className="text-xs mt-1 text-gray-300">Çok kelimeli arama desteklenir: "Ahmet yıllık", "Mart bordro"</p>
-            </div>
           </>
         )}
 
