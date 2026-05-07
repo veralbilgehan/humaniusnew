@@ -702,6 +702,7 @@ const SistemAyarlari: React.FC = () => {
                       className="rounded-lg border border-blue-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500"
                       required
                       disabled={Boolean(editingUserId)}
+                      autoComplete="off"
                     />
                     {!editingUserId && (
                       <input
@@ -712,6 +713,7 @@ const SistemAyarlari: React.FC = () => {
                         className="rounded-lg border border-blue-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500"
                         minLength={6}
                         required
+                        autoComplete="new-password"
                       />
                     )}
                     <select
