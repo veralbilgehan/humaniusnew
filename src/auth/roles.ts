@@ -23,8 +23,8 @@ export function getDefaultViewForRole(role: AppRole): View {
 
 export function canAccessView(role: AppRole, view: View): boolean {
   const allowedViews: Record<AppRole, View[]> = {
-    superadmin: ['arama', 'personel', 'bordro', 'bordro-onay', 'izin', 'raporlar', 'uyari', 'ayar', 'gorev-tanimi', 'gorev-tanimi-kayitlari', 'ozluk-dosyasi', 'kullanicilar', 'kullanim-kilavuzu', 'pdks', 'performans', 'ise-alim', 'egitim', 'analitik', 'kvkk', 'izin-tanimlari', 'org-sema', 'zimmet', 'okr', 'yetkinlik', 'onboarding', 'yan-haklar', 'izin-cakisma', 'form-builder'],
-    admin:      ['arama', 'personel', 'bordro', 'bordro-onay', 'izin', 'raporlar', 'uyari', 'ayar', 'gorev-tanimi', 'gorev-tanimi-kayitlari', 'ozluk-dosyasi', 'kullanicilar', 'kullanim-kilavuzu', 'pdks', 'performans', 'ise-alim', 'egitim', 'analitik', 'kvkk', 'izin-tanimlari', 'org-sema', 'zimmet', 'okr', 'yetkinlik', 'onboarding', 'yan-haklar', 'izin-cakisma', 'form-builder'],
+    superadmin: ['arama', 'personel', 'bordro', 'bordro-onay', 'izin', 'raporlar', 'uyari', 'ayar', 'gorev-tanimi', 'gorev-tanimi-kayitlari', 'ozluk-dosyasi', 'kullanicilar', 'kullanim-kilavuzu', 'pdks', 'performans', 'ise-alim', 'egitim', 'analitik', 'kvkk', 'izin-tanimlari', 'org-sema', 'zimmet', 'okr', 'yetkinlik', 'onboarding', 'yan-haklar', 'izin-cakisma', 'form-builder', 'icerik-cek'],
+    admin:      ['arama', 'personel', 'bordro', 'bordro-onay', 'izin', 'raporlar', 'uyari', 'ayar', 'gorev-tanimi', 'gorev-tanimi-kayitlari', 'ozluk-dosyasi', 'kullanicilar', 'kullanim-kilavuzu', 'pdks', 'performans', 'ise-alim', 'egitim', 'analitik', 'kvkk', 'izin-tanimlari', 'org-sema', 'zimmet', 'okr', 'yetkinlik', 'onboarding', 'yan-haklar', 'izin-cakisma', 'form-builder', 'icerik-cek'],
     user:       ['personel', 'gorev-tanimi', 'ozluk-dosyasi', 'org-sema', 'zimmet', 'bordro', 'izin', 'uyari', 'egitim'],
   };
 

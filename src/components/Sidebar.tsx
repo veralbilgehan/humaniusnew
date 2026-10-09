@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Users, Calendar, FileText, CreditCard, Bell, CreditCard as Edit2, SearchIcon, LogOut, BookOpen, Clock, GraduationCap, Shield, Gift, ChevronDown } from 'lucide-react';
+import { Search, Users, Calendar, FileText, CreditCard, Bell, CreditCard as Edit2, SearchIcon, LogOut, BookOpen, Clock, GraduationCap, Shield, Gift, ChevronDown, Globe } from 'lucide-react';
 import { View } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -98,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
   }, []);
 
-  const uygulamalarIds: View[] = ['pdks', 'kvkk', 'kullanim-kilavuzu'];
+  const uygulamalarIds: View[] = ['pdks', 'kvkk', 'icerik-cek', 'kullanim-kilavuzu'];
 
   const navItems = [
     { id: 'arama' as View, label: 'Arama', icon: SearchIcon },
@@ -139,6 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const uygulamalarNavItems = [
     { id: 'pdks' as View, label: 'PDKS & Devam Kontrol', icon: Clock },
     { id: 'kvkk' as View, label: 'KVKK / GDPR Uyumluluk', icon: Shield },
+    { id: 'icerik-cek' as View, label: "URL'den İçerik Çek", icon: Globe },
     { id: 'kullanim-kilavuzu' as View, label: 'Kullanım Kılavuzu', icon: BookOpen },
   ].filter((item) => canAccessView(effectiveRole, item.id));
 

@@ -29,7 +29,8 @@ export type View =
   | 'onboarding'
   | 'yan-haklar'
   | 'izin-cakisma'
-  | 'form-builder';
+  | 'form-builder'
+  | 'icerik-cek';
 
 // ─── Core Entities ───────────────────────────────────────────────────────────
 

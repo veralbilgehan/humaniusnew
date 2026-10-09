@@ -30,6 +30,7 @@ import IseAlimATS from './components/IseAlimATS';
 import EgitimLMS from './components/EgitimLMS';
 import AnalitiKDashboard from './components/AnalitiKDashboard';
 import KVKKUyumluluk from './components/KVKKUyumluluk';
+import IcerikCek from './components/IcerikCek';
 import IzinTanimlari from './components/IzinTanimlari';
 import OrganizasyonSemasi from './components/OrganizasyonSemasi';
 import ZimmetYonetimi from './components/ZimmetYonetimi';
@@ -806,6 +807,9 @@ const AppInner: React.FC = () => {
         {/* KVKK Uyumluluk */}
         {currentView === 'kvkk' && <KVKKUyumluluk />}
 
+        {/* URL'den İçerik Çek (Apify) */}
+        {currentView === 'icerik-cek' && <IcerikCek />}
+
         {/* İzin Türleri Tanımları */}
         {currentView === 'izin-tanimlari' && <IzinTanimlari />}
 
@@ -874,6 +878,7 @@ const AppInner: React.FC = () => {
           'egitim',
           'analitik',
           'kvkk',
+          'icerik-cek',
           'izin-tanimlari',
           'org-sema',
           'zimmet',
